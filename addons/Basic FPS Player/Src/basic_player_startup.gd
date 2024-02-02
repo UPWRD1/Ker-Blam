@@ -23,7 +23,7 @@ func _enter_tree():
 
 @export_category("Movement")
 @export_subgroup("Settings")
-@export var SPEED := 15.0
+@export var SPEED := 10005.0
 @export var ACCEL := 50.0
 @export var IN_AIR_SPEED := 3.0
 @export var IN_AIR_ACCEL := 5.0
