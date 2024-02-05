@@ -98,17 +98,17 @@ func wall_run(delta):
 			if abs(fmod(parts.head.rotation_degrees.y, 360.0)) < 90.0:
 				if side.dot(Vector3.RIGHT) > 0:
 					to_rot = wallrun_angle
-					print("a", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
+					#print("a", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
 				else:
 					to_rot = -wallrun_angle
-					print("b", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
+					#rint("b", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
 			else:
 				if side.dot(Vector3.RIGHT) <= 0:
 					to_rot = wallrun_angle
-					print("c", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
+					#print("c", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
 				else:
 					to_rot = -wallrun_angle
-					print("d", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
+					#print("d", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
 
 		# Set the rotation directly
 			parts.camera.rotation_degrees.z = lerp(parts.camera.rotation_degrees.z, float(to_rot), 0.1)
@@ -125,7 +125,6 @@ func _ready():
 	parts.camera.current = true
 
 func _process(delta):
-	wall_run(delta)
 	show_glitch()
 	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
 		var slide_direction = Vector3()
