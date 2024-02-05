@@ -74,7 +74,7 @@ func wall_run(delta):
 	if w_runnable and is_on_wall():
 		parts.camera.rotation_degrees.y = lerp(parts.camera.rotation_degrees.y, float(parts.camera.rotation_degrees.y), 0.0)
 		wall_normal = get_slide_collision(0).get_normal()
-		velocity.y = 0
+		velocity = Vector3(velocity.x ,0, velocity.z)
 		side = wall_normal.cross(Vector3.UP)
 		jump_count = 0
 		direction = -wall_normal * speed
@@ -89,8 +89,6 @@ func wall_run(delta):
 				state = State.WALL_JUMPING
 				significant_action.emit()
 				velocity += wall_normal * base_speed
-				#velocity.y += 1
-				#velocity.z += 1
 				w_runnable = true
 				jump_count = 0
 		if not is_on_floor():
@@ -161,9 +159,11 @@ func slam():
 		state = State.SLAMMING
 
 func jump():
-	if (is_on_floor() or jump_count < 2 or is_on_wall()) and state == State.JUMPING:
+	if (is_on_floor() or jump_count < 3 or is_on_wall()) and state == State.JUMPING:
 		velocity.y += jump_velocity
 		jump_count += 1
+		if jump_count == 3:
+			velocity *= Vector3(-0.3, 1, -0.3)
 		timer.start()
 
 func _physics_process(delta):
