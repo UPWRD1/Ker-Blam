@@ -16,24 +16,11 @@ extends CharacterBody3D
 
 signal significant_action
 
-enum State {
-	WALKING,
-	JUMPING,
-	SLIDING,
-	WALL_RUNNING,
-	WALL_JUMPING,
-	SLAMMING,
-	FALLING,
-}
-
-var state: State
+signal display_bootmsg
 
 var is_sigact = false
 var speed = base_speed
-#var sprinting = false
-#var sliding = false
-#var crouching = false
-#var wall_running = false
+
 var camera_fov_extents = [75.0, 85.0] #index 0 is normal, index 1 is sprinting
 var base_player_y_scale = 1.0
 var crouch_player_y_scale = 0.75
@@ -51,12 +38,22 @@ var jump_count = 0
 	"collision": $CollisionShape3D,
 	"timer": $Timer,
 }
-#@onready var world = get_parent()
-@onready var timer = $Timer
+
+enum St {
+	WALKING,
+	JUMPING,
+	SLIDING,
+	WALL_RUNNING,
+	WALL_JUMPING,
+	SLAMMING,
+	FALLING,
+}
+
+@onready var world = get_parent()
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var direction = Vector3()
-
+var state: St
 var current_tilt_angle: float
 var wallrun_angle = 15
 var side = Vector3()
@@ -64,10 +61,10 @@ var side = Vector3()
 func show_glitch():
 	pass
 	#if is_sigact:
-	#	parts.glitch_shader.visible = true
-#		parts.bw_shader.visible = true
-#	else:
-#		parts.glitch_shader.visible = false
+		#parts.bw_shader.visible = true
+		#parts.glitch_shader.visible = true
+	#else:
+		#parts.glitch_shader.visible = false
 		#parts.bw_shader.visible = false
 
 func wall_run(delta):
@@ -78,13 +75,13 @@ func wall_run(delta):
 		jump_count = 0
 		direction = -wall_normal * speed
 		#wall_running = true
-		state = State.WALL_RUNNING
+		state = St.WALL_RUNNING
 		speed = sprint_speed
 		parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[1], 10*delta)
 		parts.camera.rotation_degrees.y = lerp(parts.camera.rotation_degrees.y, 0.0, 1)
 		if Input.is_action_just_pressed("MOVE_JUMP"):
-			if state == State.WALL_RUNNING:
-				state = State.WALL_JUMPING
+			if state == St.WALL_RUNNING:
+				state = St.WALL_JUMPING
 				significant_action.emit()
 				velocity += wall_normal * speed
 				velocity.y += 3
@@ -111,28 +108,33 @@ func wall_run(delta):
 		# Set the rotation directly
 			parts.camera.rotation_degrees.z = lerp(parts.camera.rotation_degrees.z, float(to_rot), 0.1)
 
+
 func _reset_camera_rotation():
 	parts.camera.rotation_degrees.z = lerp(parts.camera.rotation_degrees.z, 0.0, 0.1)
-
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	#world.pause.connect(_on_pause)
 	#world.unpause.connect(_on_unpause)
-	
+	state = St.WALKING
 	parts.camera.current = true
 
 func _process(delta):
 	wall_run(delta)
 	show_glitch()
-	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
+	break_sigact()
+	if Input.is_action_pressed("MOVE_SLIDE") and not (state == St.WALL_RUNNING):
+		if Input.is_action_just_pressed("MOVE_JUMP"):
+			state = St.JUMPING
+			jump()
+			significant_action.emit()
 		var slide_direction = Vector3()
 		if !slide_started:
 			slide_direction = Vector3(direction.x, 0, direction.z).normalized()
 			slide_started = true
 
 		#sliding = true
-		state = State.SLIDING
+		state = St.SLIDING
 		speed = slide_speed
 
 		parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[1], 10*delta)
@@ -142,10 +144,7 @@ func _process(delta):
 		velocity.z += (slide_direction.z * slide_speed) / (10 * delta)
 		
 	else:
-		#sprinting = false
-		#crouching = false
-		#sliding = false
-		state = State.WALKING
+		state = St.WALKING
 		speed = base_speed
 		sensitivity = 0.1
 
@@ -154,29 +153,47 @@ func _process(delta):
 			parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[0], 10*delta)
 
 func slam():
-	if not is_on_floor() and (state == State.SLAMMING):
+	if not is_on_floor() and (state == St.SLAMMING):
 		significant_action.emit()
 		velocity = Vector3.DOWN * 100
-		state = State.SLAMMING
+		state = St.SLAMMING
 
 func jump():
-	if (is_on_floor() or jump_count < 2 or is_on_wall()) and state == State.JUMPING:
+	if is_on_floor() or jump_count < 2 and state == St.JUMPING:
 		velocity.y += jump_velocity
 		jump_count += 1
-		timer.start()
+		parts.timer.start()
 
+func fall(delta):
+	velocity.y -= (gravity * 1.3) * delta
+	w_runnable = true
+	state = St.FALLING
+
+func move(delta):
+	velocity.x = lerp(velocity.x, direction.x * speed, accel * delta)
+	velocity.z = lerp(velocity.z, direction.z * speed, accel * delta)
+			#jump_count = 0
+
+func animation_bob(input_dir):
+	pass
+
+func look(event):
+	self.rotation_degrees.y -= event.relative.x * sensitivity
+	self.rotation_degrees.x -= event.relative.y * sensitivity
+	self.rotation.x = clamp(parts.head.rotation.x, deg_to_rad(-90), deg_to_rad(90))
+	#parts.head.rotation_degrees.y -= event.relative.x * sensitivity
+	#parts.head.rotation_degrees.x -= event.relative.y * sensitivity
+	#parts.head.rotation.x = clamp(parts.head.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 func _physics_process(delta):
 	wall_run(delta)
-
+	do_sigact()
 	if not is_on_floor():
-		velocity.y -= (gravity * 1.3) * delta
-		w_runnable = true
-		state = State.FALLING
+		fall(delta)
 	else:
-		if not state == State.SLIDING:
-			velocity.x = lerp(velocity.x, direction.x * speed, accel * delta)
-			velocity.z = lerp(velocity.z, direction.z * speed, accel * delta)
-			jump_count = 0
+		if not state == St.SLIDING:
+			state = St.WALKING
+			move(delta)
+			#jump_count = 0
 		w_runnable = false
 		jump_count = 0  # Reset jump count when the jump key is released
 	
@@ -184,52 +201,34 @@ func _physics_process(delta):
 		_reset_camera_rotation()
 		
 	if Input.is_action_just_pressed("MOVE_SLAM"):
-		if not is_on_floor() and not (state == State.WALL_RUNNING):
-			state = State.SLAMMING
+		if not is_on_floor() and not (state == St.WALL_RUNNING):
+			state = St.SLAMMING
 			slam()
-			  # Reset camera rotation when on floor
+		# Reset camera rotation when on floor
 
 	if Input.is_action_just_pressed("MOVE_JUMP"):
-		state = State.JUMPING
-		jump()
-		#if state == State.WALL_RUNNING:
-			#tate = State.JUMPING
-			#significant_action.emit()
-			#velocity += wall_normal * speed
-			#velocity.y += 3
-			#velocity.z += 3
-			#w_runnable = true
-			#jump_count = 0
-			#pass
-		#else:
-			
-
-		
+		if state == St.WALL_RUNNING:
+			pass
+		else:
+			state = St.JUMPING
+			jump()
 
 	var input_dir = Input.get_vector("MOVE_LEFT", "MOVE_RIGHT", "MOVE_FORWARD", "MOVE_BACKWARD")
 	direction = input_dir.normalized().rotated(-parts.head.rotation.y)
 	direction = Vector3(direction.x, 0, direction.y)
 
-	if state == State.WALL_RUNNING:
-		velocity.x = lerp(velocity.x, direction.x * speed, accel * delta)
-		velocity.z = lerp(velocity.z, direction.z * speed, accel * delta)
-
+	if state == St.WALL_RUNNING:
+		move(delta)
 
 	# bob head
-	#if input_dir and is_on_floor() and not state == State.SLIDING:
-		#parts.camera_animation.play("head_bob", 0.5)
-	#else:
-		#parts.camera_animation.play("reset", 0.5)
+	animation_bob(input_dir)
 
 	move_and_slide()
 
-
 func _input(event):
 	if event is InputEventMouseMotion:
-		if not state == State.WALL_RUNNING:
-			parts.head.rotation_degrees.y -= event.relative.x * sensitivity
-			parts.head.rotation_degrees.x -= event.relative.y * sensitivity
-			parts.head.rotation.x = clamp(parts.head.rotation.x, deg_to_rad(-90), deg_to_rad(90))
+		if not state == St.WALL_RUNNING:
+			look(event)
 
 func _on_pause():
 	pass
@@ -240,12 +239,16 @@ func _on_unpause():
 func _on_timer_timeout():
 	w_runnable = false # Replace with function body.
 
+func break_sigact():
+	pass
 
-func _on_significant_action():
-	is_sigact = true
-	Engine.time_scale = 0.1
-	await get_tree().create_timer(0.1).timeout
-	while Engine.time_scale < 1:
-		Engine.time_scale = lerp(Engine.time_scale, 1.0, 0.5)
-
-	is_sigact = false
+func do_sigact():
+	pass
+		#if Input.is_action_pressed("do_sigact"):
+			#is_sigact = true
+			#Engine.time_scale = 0.1
+			##velocity = Vector3.ZERO
+			#await get_tree().create_timer(0.1).timeout
+			#while Engine.time_scale < 1:
+				#Engine.time_scale = lerp(Engine.time_scale, 1.0, 0.5)
+			#is_sigact = false
