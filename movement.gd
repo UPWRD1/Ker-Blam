@@ -72,6 +72,7 @@ func show_glitch():
 
 func wall_run(delta):
 	if w_runnable and is_on_wall():
+		parts.camera.rotation_degrees.y = lerp(parts.camera.rotation_degrees.y, float(parts.camera.rotation_degrees.y), 0.0)
 		wall_normal = get_slide_collision(0).get_normal()
 		velocity.y = 0
 		side = wall_normal.cross(Vector3.UP)
@@ -79,21 +80,22 @@ func wall_run(delta):
 		direction = -wall_normal * speed
 		#wall_running = true
 		state = State.WALL_RUNNING
-		speed = sprint_speed
+		#speed = sprint_speed
+		speed *= 3
 		parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[1], 10*delta)
 		parts.camera.rotation_degrees.y = lerp(parts.camera.rotation_degrees.y, 0.0, 1)
 		if Input.is_action_just_pressed("MOVE_JUMP"):
 			if state == State.WALL_RUNNING:
 				state = State.WALL_JUMPING
 				significant_action.emit()
-				velocity += wall_normal * speed
-				velocity.y += 3
-				velocity.z += 3
+				velocity += wall_normal * base_speed
+				#velocity.y += 1
+				#velocity.z += 1
 				w_runnable = true
 				jump_count = 0
 		if not is_on_floor():
-			var to_rot = 0
-			if abs(fmod(parts.head.rotation_degrees.y, 180.0)) < 90.0:
+			var to_rot
+			if abs(fmod(parts.head.rotation_degrees.y, 360.0)) < 90.0:
 				if side.dot(Vector3.RIGHT) > 0:
 					to_rot = wallrun_angle
 					print("a", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
@@ -182,7 +184,7 @@ func _physics_process(delta):
 	
 	if not is_on_wall():
 		_reset_camera_rotation()
-		
+
 	if Input.is_action_just_pressed("MOVE_SLAM"):
 		if not is_on_floor() and not (state == State.WALL_RUNNING):
 			state = State.SLAMMING
@@ -192,19 +194,6 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("MOVE_JUMP"):
 		state = State.JUMPING
 		jump()
-		#if state == State.WALL_RUNNING:
-			#tate = State.JUMPING
-			#significant_action.emit()
-			#velocity += wall_normal * speed
-			#velocity.y += 3
-			#velocity.z += 3
-			#w_runnable = true
-			#jump_count = 0
-			#pass
-		#else:
-			
-
-		
 
 	var input_dir = Input.get_vector("MOVE_LEFT", "MOVE_RIGHT", "MOVE_FORWARD", "MOVE_BACKWARD")
 	direction = input_dir.normalized().rotated(-parts.head.rotation.y)
@@ -226,10 +215,10 @@ func _physics_process(delta):
 
 func _input(event):
 	if event is InputEventMouseMotion:
-		if not state == State.WALL_RUNNING:
+		if not is_on_wall_only():
 			parts.head.rotation_degrees.y -= event.relative.x * sensitivity
-			parts.head.rotation_degrees.x -= event.relative.y * sensitivity
-			parts.head.rotation.x = clamp(parts.head.rotation.x, deg_to_rad(-90), deg_to_rad(90))
+		parts.head.rotation_degrees.x -= event.relative.y * sensitivity
+		parts.head.rotation.x = clamp(parts.head.rotation.x, deg_to_rad(-90), deg_to_rad(90))	
 
 func _on_pause():
 	pass
