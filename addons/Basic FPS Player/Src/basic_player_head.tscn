@@ -1,5 +1,16 @@
-[gd_scene format=3 uid="uid://kmyakts4l64t"]
+[gd_scene load_steps=2 format=3 uid="uid://kmyakts4l64t"]
+
+[ext_resource type="FontFile" uid="uid://be5pej05gr8jy" path="res://Contrail_One/ContrailOne-Regular.ttf" id="1_h160x"]
 
 [node name="Head" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(0.137445, -0.429543, 0.892525, 0, 0.901077, 0.433659, -0.990509, -0.0596041, 0.123848, -0.7, -0.4, -0.935)
+text = "HEALTH"
+font = ExtResource("1_h160x")
+font_size = 12
+outline_size = 0
+horizontal_alignment = 2
+uppercase = true

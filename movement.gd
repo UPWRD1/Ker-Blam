@@ -26,7 +26,7 @@ enum State {
 	FALLING,
 }
 
-var state: State
+@export var state: State
 
 var is_sigact = false
 var speed = base_speed
@@ -36,7 +36,7 @@ var speed = base_speed
 #var wall_running = false
 var camera_fov_extents = [75.0, 85.0] #index 0 is normal, index 1 is sprinting
 var base_player_y_scale = 1.0
-var crouch_player_y_scale = 0.75
+var crouch_player_y_scale = 0.25
 var wall_normal
 var w_runnable = false
 
@@ -147,6 +147,7 @@ func _process(delta):
 		state = State.WALKING
 		speed = base_speed
 		sensitivity = 0.1
+		parts.body.scale.y = lerp(parts.body.scale.y, base_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
 
 
 		if slide_enabled:
