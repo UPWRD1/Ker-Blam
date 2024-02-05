@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://be5pej05gr8jy"
-path="res://.godot/imported/ContrailOne-Regular.ttf-c8d9e25ce3a1826515e17ddb80bf21ca.fontdata"
+uid="uid://dhpdj7thauvue"
+path="res://.godot/imported/Mohave-Italic.ttf-5554d4df77aabbcaa441a62b39410581.fontdata"
 
 [deps]
 
-source_file="res://Contrail_One/ContrailOne-Regular.ttf"
-dest_files=["res://.godot/imported/ContrailOne-Regular.ttf-c8d9e25ce3a1826515e17ddb80bf21ca.fontdata"]
+source_file="res://Mohave/static/Mohave-Italic.ttf"
+dest_files=["res://.godot/imported/Mohave-Italic.ttf-5554d4df77aabbcaa441a62b39410581.fontdata"]
 
 [params]
 

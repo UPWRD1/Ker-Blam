@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://htljjiwxx5yv"]
+
+[ext_resource type="FontFile" uid="uid://coj5aofxoaae8" path="res://Mohave/static/Mohave-BoldItalic.ttf" id="1_ps1g2"]
+
+[resource]
+default_font = ExtResource("1_ps1g2")
+default_font_size = 64

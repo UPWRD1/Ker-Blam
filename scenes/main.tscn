@@ -1,54 +1,33 @@
-[gd_scene load_steps=21 format=3 uid="uid://vupfism0y8ub"]
+[gd_scene load_steps=13 format=3 uid="uid://vupfism0y8ub"]
 
-[ext_resource type="Script" path="res://movement.gd" id="1_ci6ul"]
-[ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://textures/dark.png" id="1_dsuyi"]
-[ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://textures/green.png" id="2_n2jfh"]
-[ext_resource type="PackedScene" uid="uid://kmyakts4l64t" path="res://addons/Basic FPS Player/Src/basic_player_head.tscn" id="2_uri1i"]
-[ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://textures/orange.png" id="5_f6lep"]
-[ext_resource type="Texture2D" uid="uid://cl4kewig3pk7s" path="res://textures/purple.png" id="6_l1v0e"]
+[ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://textures/dark.png" id="4_6421s"]
+[ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://textures/green.png" id="7_gw5sn"]
+[ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://textures/orange.png" id="8_r2t6e"]
+[ext_resource type="Texture2D" uid="uid://cl4kewig3pk7s" path="res://textures/purple.png" id="9_qusmc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_caja7"]
 size = Vector3(50, 0, 50)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5df6w"]
-albedo_texture = ExtResource("1_dsuyi")
+albedo_texture = ExtResource("4_6421s")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_6b5j0"]
 size = Vector2(50, 50)
 
-[sub_resource type="Gradient" id="Gradient_t6m8x"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_o7yir"]
-gradient = SubResource("Gradient_t6m8x")
-fill_from = Vector2(0.401099, 1)
-fill_to = Vector2(0.450549, 0)
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_msuu0"]
-panorama = SubResource("GradientTexture2D_o7yir")
-
-[sub_resource type="Sky" id="Sky_4ggmq"]
-sky_material = SubResource("PanoramaSkyMaterial_msuu0")
-
-[sub_resource type="Environment" id="Environment_4mccc"]
-sky = SubResource("Sky_4ggmq")
-ambient_light_source = 3
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_li7ud"]
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tphqv"]
-albedo_texture = ExtResource("2_n2jfh")
+albedo_texture = ExtResource("7_gw5sn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gak8a"]
-albedo_texture = ExtResource("2_n2jfh")
+albedo_texture = ExtResource("7_gw5sn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k2so5"]
-albedo_texture = ExtResource("5_f6lep")
+albedo_texture = ExtResource("8_r2t6e")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jrl3v"]
-albedo_texture = ExtResource("5_f6lep")
+albedo_texture = ExtResource("8_r2t6e")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eik52"]
-albedo_texture = ExtResource("6_l1v0e")
+albedo_texture = ExtResource("9_qusmc")
 
 [node name="main" type="Node3D"]
 
@@ -63,28 +42,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0145743, 0.0133858, 0.0692
 material_override = SubResource("StandardMaterial3D_5df6w")
 custom_aabb = AABB(0.5, 0, 0, 0.5, 0.5, 0.5)
 mesh = SubResource("PlaneMesh_6b5j0")
-
-[node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.664761, -0.606207, -0.436584, 0, -0.584406, 0.811462, -0.747056, -0.539428, -0.38849, 1.99482, 9.7782, -4.4998)
-shadow_enabled = true
-shadow_bias = 0.0
-shadow_opacity = 0.64
-shadow_blur = 2.414
-
-[node name="Enivroment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_4mccc")
-
-[node name="Basic FPS Player" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-script = ExtResource("1_ci6ul")
-
-[node name="Head" parent="Basic FPS Player" instance=ExtResource("2_uri1i")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.412659, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Basic FPS Player"]
-shape = SubResource("CapsuleShape3D_li7ud")
-
-[node name="Timer" type="Timer" parent="Basic FPS Player"]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 2.5, -20)

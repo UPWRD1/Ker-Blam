@@ -61,6 +61,8 @@ var current_tilt_angle: float
 var wallrun_angle = 15
 var side = Vector3()
 
+var iscaptured: bool
+
 func show_glitch():
 	pass
 	#if is_sigact:
@@ -116,13 +118,24 @@ func _reset_camera_rotation():
 
 
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	#world.pause.connect(_on_pause)
-	#world.unpause.connect(_on_unpause)
-	
+	if not is_multiplayer_authority(): return
 	parts.camera.current = true
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func _enter_tree():
+	set_multiplayer_authority(str(name).to_int())
+
+func escape():
+	if Input.is_action_pressed("ACTION_ESCAPE"):
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _process(delta):
+	if not is_multiplayer_authority(): return
+	
+	escape()
 	show_glitch()
 	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
 		var slide_direction = Vector3()
@@ -154,20 +167,23 @@ func _process(delta):
 			parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[0], 10*delta)
 
 func slam():
+	if not is_multiplayer_authority(): return
 	if not is_on_floor() and (state == State.SLAMMING):
 		significant_action.emit()
 		velocity = Vector3.DOWN * 100
 		state = State.SLAMMING
 
 func jump():
+	if not is_multiplayer_authority(): return
 	if (is_on_floor() or jump_count < 3 or is_on_wall()) and state == State.JUMPING:
 		velocity.y += jump_velocity
 		jump_count += 1
 		if jump_count == 3:
-			velocity *= Vector3(-0.3, 1, -0.3)
+			velocity *= Vector3(-1, 1, -1)
 		timer.start()
 
 func _physics_process(delta):
+	if not is_multiplayer_authority(): return
 	wall_run(delta)
 
 	if not is_on_floor():
@@ -214,7 +230,9 @@ func _physics_process(delta):
 
 
 func _input(event):
-	if event is InputEventMouseMotion:
+	if not is_multiplayer_authority(): return
+
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		if not is_on_wall_only():
 			parts.head.rotation_degrees.y -= event.relative.x * sensitivity
 		parts.head.rotation_degrees.x -= event.relative.y * sensitivity

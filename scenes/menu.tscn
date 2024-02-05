@@ -1,0 +1,93 @@
+[gd_scene load_steps=11 format=3 uid="uid://dgww5i06smk8l"]
+
+[ext_resource type="Script" path="res://scenes/menu.gd" id="1_d5m2f"]
+[ext_resource type="PackedScene" uid="uid://vupfism0y8ub" path="res://scenes/main.tscn" id="1_u6hpc"]
+[ext_resource type="Theme" uid="uid://htljjiwxx5yv" path="res://menu_primary_theme.tres" id="2_144my"]
+[ext_resource type="Theme" uid="uid://dvv2kyy22v48r" path="res://menu_secondary_theme.tres" id="3_dsos3"]
+[ext_resource type="Theme" uid="uid://k7fq62ur2t8i" path="res://menu_text_entry_theme.tres" id="4_ikv7p"]
+
+[sub_resource type="Gradient" id="Gradient_831j0"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_o7yir"]
+gradient = SubResource("Gradient_831j0")
+fill_from = Vector2(0.401099, 1)
+fill_to = Vector2(0.450549, 0)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_5jior"]
+panorama = SubResource("GradientTexture2D_o7yir")
+
+[sub_resource type="Sky" id="Sky_4ggmq"]
+sky_material = SubResource("PanoramaSkyMaterial_5jior")
+
+[sub_resource type="Environment" id="Environment_2xigm"]
+sky = SubResource("Sky_4ggmq")
+ambient_light_source = 3
+
+[node name="Menu" type="Node"]
+script = ExtResource("1_d5m2f")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 390.0
+offset_top = 221.0
+offset_right = -390.0
+offset_bottom = -221.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_144my")
+text = "Menu"
+horizontal_alignment = 1
+
+[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_dsos3")
+text = "HOST"
+
+[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_dsos3")
+text = "JOIN"
+
+[node name="AddressEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_ikv7p")
+placeholder_text = "Enter Join Address"
+alignment = 1
+
+[node name="main" parent="." instance=ExtResource("1_u6hpc")]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.664761, -0.606207, -0.436584, 0, -0.584406, 0.811462, -0.747056, -0.539428, -0.38849, 1.99482, 9.7782, -4.4998)
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_opacity = 0.64
+shadow_blur = 2.414
+
+[node name="Enivroment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2xigm")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Player.tscn")
+spawn_path = NodePath("..")
+
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
