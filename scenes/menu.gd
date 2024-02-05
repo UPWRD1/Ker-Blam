@@ -1,7 +1,8 @@
 extends Node
 
-@onready var main_menu = $CanvasLayer/MainMenu
-@onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
+@onready var lan_menu = $CanvasLayer/Menu2
+@onready var address_entry = $CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer/AddressEntry 
+@onready var bg = $CanvasLayer/Menu2/ColorRect
 
 const Player = preload("res://Player.tscn")
 const PORT = 9999
@@ -18,7 +19,8 @@ func _process(delta):
 
 
 func _on_host_button_pressed():
-	main_menu.hide()
+	lan_menu.hide()
+	bg.hide()
 	
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
@@ -30,7 +32,7 @@ func _on_host_button_pressed():
 	#upnp_setup()
 
 func _on_join_button_pressed():
-	main_menu.hide()
+	lan_menu.hide()
 	
 	enet_peer.create_client("localhost", PORT)
 	multiplayer.multiplayer_peer = enet_peer

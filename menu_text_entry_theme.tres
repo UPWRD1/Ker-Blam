@@ -1,7 +1,16 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://k7fq62ur2t8i"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://k7fq62ur2t8i"]
 
+[ext_resource type="FontFile" uid="uid://dudvyf5rbda3g" path="res://Mohave/static/Mohave-LightItalic.ttf" id="1_212xd"]
 [ext_resource type="FontFile" uid="uid://cp068mikklw8d" path="res://Mohave/static/Mohave-Light.ttf" id="1_ju6vx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ckvnk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_utbak"]
 
 [resource]
 default_font = ExtResource("1_ju6vx")
 default_font_size = 32
+LineEdit/colors/font_placeholder_color = Color(0.117647, 0.117647, 0.117647, 1)
+LineEdit/fonts/font = ExtResource("1_212xd")
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_ckvnk")
+LineEdit/styles/normal = SubResource("StyleBoxEmpty_utbak")
