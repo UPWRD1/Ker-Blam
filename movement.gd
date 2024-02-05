@@ -122,8 +122,13 @@ func _ready():
 	parts.camera.current = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
+
+
+
 func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
+	await get_tree().create_timer(0.125).timeout
+	parts.collision.disabled = false
 
 func escape():
 	if Input.is_action_pressed("ACTION_ESCAPE"):
