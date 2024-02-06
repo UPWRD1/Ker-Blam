@@ -1,10 +1,17 @@
-[gd_scene load_steps=15 format=3 uid="uid://dgww5i06smk8l"]
+[gd_scene load_steps=17 format=3 uid="uid://dgww5i06smk8l"]
 
 [ext_resource type="Script" path="res://scenes/menu.gd" id="1_d5m2f"]
 [ext_resource type="PackedScene" uid="uid://vupfism0y8ub" path="res://scenes/main.tscn" id="1_u6hpc"]
 [ext_resource type="Theme" uid="uid://htljjiwxx5yv" path="res://menu_primary_theme.tres" id="2_144my"]
 [ext_resource type="Theme" uid="uid://dvv2kyy22v48r" path="res://menu_secondary_theme.tres" id="3_dsos3"]
 [ext_resource type="Theme" uid="uid://k7fq62ur2t8i" path="res://menu_text_entry_theme.tres" id="4_ikv7p"]
+[ext_resource type="Shader" path="res://scenes/transition_1.gdshader" id="5_bayir"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1aieo"]
+resource_local_to_scene = true
+shader = ExtResource("5_bayir")
+shader_parameter/progress = 0.0
+shader_parameter/diamondPixelSize = 20.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lpumu"]
 bg_color = Color(1, 1, 1, 1)
@@ -38,8 +45,18 @@ script = ExtResource("1_d5m2f")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="Transition" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_1aieo")
+use_parent_material = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.266667, 0.560784, 1, 1)
+
 [node name="Menu1" type="PanelContainer" parent="CanvasLayer"]
-visible = false
 self_modulate = Color(1, 1, 1, 0)
 clip_children = 2
 z_index = -2
@@ -88,14 +105,14 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_w4brg")
 text = " PLAY"
 alignment = 0
 
-[node name="HostButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
+[node name="LoadoutButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_dsos3")
 theme_override_constants/outline_size = 0
 text = "  LOADOUT"
 alignment = 0
 
-[node name="JoinButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
+[node name="OptionsButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_dsos3")
 text = "  OPTIONS"
@@ -191,8 +208,9 @@ environment = SubResource("Environment_2xigm")
 _spawnable_scenes = PackedStringArray("res://Player.tscn")
 spawn_path = NodePath("..")
 
-[connection signal="pressed" from="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer/LoadoutButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer/OptionsButton" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]

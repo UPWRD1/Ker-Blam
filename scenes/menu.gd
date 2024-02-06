@@ -1,8 +1,13 @@
 extends Node
 
+@onready var transition = $CanvasLayer/Transition
+
+@onready var home_menu = $CanvasLayer/Menu1
 @onready var lan_menu = $CanvasLayer/Menu2
 @onready var address_entry = $CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer/AddressEntry 
 @onready var bg = $CanvasLayer/Menu2/ColorRect
+@onready var play_button = $CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer/PlayButton
+#@onready var prog = transition.material.get("shader_parameter/progress")
 
 const Player = preload("res://Player.tscn")
 const PORT = 9999
@@ -10,8 +15,9 @@ var enet_peer = ENetMultiplayerPeer.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
-
+	transition.show()
+	home_menu.show()
+	lan_menu.hide()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -19,8 +25,10 @@ func _process(delta):
 
 
 func _on_host_button_pressed():
+	transition_in()
 	lan_menu.hide()
 	bg.hide()
+	transition_out()
 	
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
@@ -32,7 +40,10 @@ func _on_host_button_pressed():
 	#upnp_setup()
 
 func _on_join_button_pressed():
+	transition_in()
 	lan_menu.hide()
+	bg.hide()
+	transition_out()
 	
 	enet_peer.create_client("localhost", PORT)
 	multiplayer.multiplayer_peer = enet_peer
@@ -66,3 +77,25 @@ func upnp_setup():
 		"UPNP Port Mapping Failed! Error %s" % map_result)
 	
 	print("Success! Join Address: %s" % upnp.query_external_address())
+
+
+func _on_play_button_pressed():
+	transition_in()
+	await get_tree().create_timer(0.1).timeout
+	home_menu.hide()
+	lan_menu.show()
+	transition_out()
+
+func transition_in():
+	var amt = 0.0
+	while amt <= 1:
+		amt += 0.1
+		transition.material.set("shader_parameter/progress", amt)
+		await get_tree().create_timer(0.01).timeout
+		
+func transition_out():
+	var amt = 1.0
+	while amt <= 1:
+		amt -= 0.1
+		transition.material.set("shader_parameter/progress", amt)
+		await get_tree().create_timer(0.01).timeout
