@@ -72,17 +72,19 @@ var iscaptured: bool
 # Functions for movement
 func can_climb():
 	if state != State.SLIDING:
-		for ray in parts.chestrays.get_children():
-			if ray.is_colliding():
-				for ray2 in parts.headrays.get_children():
-					if ray2.is_colliding():
-						return false
-				return true
-			else:
-				return false
+		if is_on_wall():
+			for ray in parts.chestrays.get_children():
+				if ray.is_colliding():
+					for ray2 in parts.headrays.get_children():
+						if ray2.is_colliding():
+							return false
+					return true
+				else:
+					return false
+		else:
+			return false
 	else:
 		return false
-
 	
 	
 func climb():
@@ -123,6 +125,7 @@ func climb():
 		var fm_tween = get_tree().create_tween().set_trans(Tween.TRANS_LINEAR)
 		fm_tween.tween_property(self,"global_transform:origin",forward_movement,h_move_time)
 	# Reset Restrictions
+	velocity = velocity + Vector3(velocity.x, velocity.y, velocity.z * 1.5)
 
 func wall_run(delta):
 	if w_runnable and is_on_wall_only():
@@ -174,7 +177,7 @@ func _enter_tree():
 	parts.collision.disabled = false
 
 func escape():
-	if Input.is_action_pressed("ACTION_ESCAPE"):
+	if Input.is_action_just_pressed("ACTION_ESCAPE"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:

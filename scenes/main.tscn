@@ -1,6 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://vupfism0y8ub"]
+[gd_scene load_steps=18 format=3 uid="uid://vupfism0y8ub"]
 
 [ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://textures/dark.png" id="4_6421s"]
+[ext_resource type="Texture2D" uid="uid://boqnb8j1wjtws" path="res://hochsal_field_4k.exr" id="5_1mgo2"]
 [ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://textures/green.png" id="7_gw5sn"]
 [ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://textures/orange.png" id="8_r2t6e"]
 [ext_resource type="Texture2D" uid="uid://cl4kewig3pk7s" path="res://textures/purple.png" id="9_qusmc"]
@@ -83,20 +84,21 @@ albedo_texture = ExtResource("8_r2t6e")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eik52"]
 albedo_texture = ExtResource("9_qusmc")
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kw0vv"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_smt2o"]
+panorama = ExtResource("5_1mgo2")
 
-[sub_resource type="Sky" id="Sky_ieq45"]
-sky_material = SubResource("ProceduralSkyMaterial_kw0vv")
-process_mode = 1
+[sub_resource type="Sky" id="Sky_q8t4b"]
+sky_material = SubResource("PanoramaSkyMaterial_smt2o")
 
 [sub_resource type="Environment" id="Environment_jdjqb"]
 background_mode = 2
-sky = SubResource("Sky_ieq45")
-ambient_light_source = 3
-ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_sky_contribution = 0.65
-reflected_light_source = 2
+sky = SubResource("Sky_q8t4b")
+ambient_light_color = Color(0.423529, 0.423529, 0.423529, 1)
+ambient_light_sky_contribution = 0.61
+ambient_light_energy = 3.0
 tonemap_mode = 2
+tonemap_white = 8.13
+adjustment_enabled = true
 
 [node name="main" type="Node3D"]
 
@@ -179,3 +181,12 @@ size = Vector3(5, 2.5, 5)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_jdjqb")
+
+[node name="Sun" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(-0.811772, -0.263895, -0.520947, 0.0365591, -0.913287, 0.405673, -0.582829, 0.310268, 0.751028, -5.87804, 12.7397, -4.4998)
+light_energy = 2.0
+light_indirect_energy = 3.166
+shadow_enabled = true
+shadow_normal_bias = 0.729
+shadow_opacity = 0.85
+shadow_blur = 0.98

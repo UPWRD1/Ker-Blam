@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dgww5i06smk8l"]
+[gd_scene load_steps=13 format=3 uid="uid://dgww5i06smk8l"]
 
 [ext_resource type="Script" path="res://scenes/menu.gd" id="1_d5m2f"]
 [ext_resource type="PackedScene" uid="uid://vupfism0y8ub" path="res://scenes/main.tscn" id="1_u6hpc"]
@@ -36,23 +36,6 @@ shader_parameter/particle_texture = ExtResource("4_gpjoo")
 bg_color = Color(1, 1, 1, 0)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsm67"]
-
-[sub_resource type="Gradient" id="Gradient_831j0"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_o7yir"]
-gradient = SubResource("Gradient_831j0")
-fill_from = Vector2(0.401099, 1)
-fill_to = Vector2(0.450549, 0)
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_5jior"]
-panorama = SubResource("GradientTexture2D_o7yir")
-
-[sub_resource type="Sky" id="Sky_4ggmq"]
-sky_material = SubResource("PanoramaSkyMaterial_5jior")
-
-[sub_resource type="Environment" id="Environment_2xigm"]
-sky = SubResource("Sky_4ggmq")
-ambient_light_source = 3
 
 [node name="Menu" type="Node"]
 script = ExtResource("1_d5m2f")
@@ -204,16 +187,6 @@ placeholder_text = " Enter address port"
 [node name="Node" type="Node" parent="CanvasLayer/Menu2"]
 
 [node name="main" parent="." instance=ExtResource("1_u6hpc")]
-
-[node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.664761, -0.606207, -0.436584, 0, -0.584406, 0.811462, -0.747056, -0.539428, -0.38849, 1.99482, 9.7782, -4.4998)
-shadow_enabled = true
-shadow_bias = 0.0
-shadow_opacity = 0.64
-shadow_blur = 2.414
-
-[node name="Enivroment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_2xigm")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://Player.tscn")
