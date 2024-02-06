@@ -288,27 +288,6 @@ func _input(event):
 	if not is_multiplayer_authority(): return
 
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		#if not is_on_wall_only():
-			#parts.head.rotation_degrees.y -= event.relative.x * sensitivity
 		parts.head.rotation_degrees.y -= event.relative.x * sensitivity
 		parts.head.rotation_degrees.x -= event.relative.y * sensitivity
 		parts.head.rotation.x = clamp(parts.head.rotation.x, deg_to_rad(-90), deg_to_rad(90))	
-
-func _on_pause():
-	pass
-
-func _on_unpause():
-	pass
-
-func _on_timer_timeout():
-	w_runnable = false # Replace with function body.
-
-
-func _on_significant_action():
-	is_sigact = true
-	Engine.time_scale = 0.1
-	await get_tree().create_timer(0.1).timeout
-	while Engine.time_scale < 1:
-		Engine.time_scale = lerp(Engine.time_scale, 1.0, 0.5)
-
-	is_sigact = false

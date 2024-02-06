@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dgww5i06smk8l"]
+[gd_scene load_steps=15 format=3 uid="uid://dgww5i06smk8l"]
 
 [ext_resource type="Script" path="res://scenes/menu.gd" id="1_d5m2f"]
 [ext_resource type="PackedScene" uid="uid://vupfism0y8ub" path="res://scenes/main.tscn" id="1_u6hpc"]
@@ -15,11 +15,6 @@ shader_parameter/diamondPixelSize = 20.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lpumu"]
 bg_color = Color(1, 1, 1, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vm7v4"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w4brg"]
-bg_color = Color(0.0745098, 0.560784, 1, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsm67"]
 
@@ -54,7 +49,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.266667, 0.560784, 1, 1)
+color = Color(0.117647, 0.117647, 0.117647, 1)
 
 [node name="Menu1" type="PanelContainer" parent="CanvasLayer"]
 self_modulate = Color(1, 1, 1, 0)
@@ -97,8 +92,6 @@ alignment = 1
 [node name="PlayButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_144my")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_vm7v4")
-theme_override_styles/hover = SubResource("StyleBoxFlat_w4brg")
 text = " PLAY"
 alignment = 0
 
@@ -125,10 +118,12 @@ alignment = 0
 
 [node name="Menu2" type="PanelContainer" parent="CanvasLayer"]
 visible = false
+modulate = Color(0.0745098, 0.560784, 1, 1)
 self_modulate = Color(1, 1, 1, 0)
 clip_children = 2
-offset_right = 960.0
-offset_bottom = 540.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -166,7 +161,6 @@ alignment = 1
 [node name="Label" type="Label" parent="CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_144my")
-theme_override_colors/font_color = Color(0.117647, 0.117647, 0.117647, 1)
 text = "FIND MATCH"
 
 [node name="HostButton" type="Button" parent="CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
