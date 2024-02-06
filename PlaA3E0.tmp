@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://ddycyagkmbqcf"]
 
-[ext_resource type="Script" path="res://movement.gd" id="1_jcs1m"]
+[ext_resource type="Script" path="res://new_movement.gd" id="1_rfv0b"]
 [ext_resource type="PackedScene" uid="uid://kmyakts4l64t" path="res://addons/Basic FPS Player/Src/basic_player_head.tscn" id="2_dl8kq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_li7ud"]
@@ -20,8 +20,18 @@ properties/2/spawn = true
 properties/2/replication_mode = 1
 
 [node name="Basic FPS Player" type="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4361, 0)
-script = ExtResource("1_jcs1m")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+script = ExtResource("1_rfv0b")
+mouse_y_sens = null
+mouse_x_sens = null
+move_speed = null
+acceleration = null
+gravity = null
+friction = null
+max_climb_angle = null
+angle_of_freedom = null
+boost_accumulation_speed = null
+max_boost_multiplier = null
 
 [node name="Head" parent="." instance=ExtResource("2_dl8kq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.696586, -0.0470605)

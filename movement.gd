@@ -6,6 +6,7 @@ extends CharacterBody3D
 
 @export var base_speed = 12
 @export var sprint_speed = 16
+@export var wall_speed = 30
 @export var jump_velocity = 6
 @export var sensitivity = 0.1
 @export var accel = 10
@@ -76,14 +77,13 @@ func wall_run(delta):
 	if w_runnable and is_on_wall_only():
 		parts.camera.rotation_degrees.y = lerp(parts.camera.rotation_degrees.y, float(parts.camera.rotation_degrees.y), 0.0)
 		wall_normal = get_slide_collision(0).get_normal()
-		velocity = Vector3(velocity.x ,0, velocity.z)
+		velocity = Vector3(velocity.x, 0, velocity.z)
 		side = wall_normal.cross(Vector3.UP)
 		jump_count = 0
-		direction = -wall_normal * speed
-		#wall_running = true
+		direction = -wall_normal * wall_speed
 		state = State.WALL_RUNNING
-		#speed = sprint_speed
-		speed *= 3
+		speed = wall_speed
+		#speed *= 3
 		parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[1], 10*delta)
 		parts.camera.rotation_degrees.y = lerp(parts.camera.rotation_degrees.y, 0.0, 1)
 		if Input.is_action_just_pressed("MOVE_JUMP"):
@@ -144,7 +144,7 @@ func _process(delta):
 	show_glitch()
 	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
 		var slide_direction = Vector3()
-		if !slide_started:
+		if !slide_started and is_on_floor():
 			slide_direction = Vector3(direction.x, 0, direction.z).normalized()
 			slide_started = true
 

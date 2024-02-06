@@ -26,16 +26,16 @@ func _process(delta):
 
 func _on_host_button_pressed():
 	transition_in()
-	lan_menu.hide()
-	bg.hide()
-	transition_out()
-	
+	await get_tree().create_timer(0.1).timeout
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(remove_player)
-	
+	lan_menu.hide()
+	bg.hide()
+	await get_tree().create_timer(0.1).timeout
 	add_player(multiplayer.get_unique_id())
+	transition_out()
 	
 	#upnp_setup()
 
@@ -43,6 +43,7 @@ func _on_join_button_pressed():
 	transition_in()
 	lan_menu.hide()
 	bg.hide()
+	await get_tree().create_timer(0.1).timeout
 	transition_out()
 	
 	enet_peer.create_client("localhost", PORT)
@@ -89,13 +90,13 @@ func _on_play_button_pressed():
 func transition_in():
 	var amt = 0.0
 	while amt <= 1:
-		amt += 0.1
+		amt += 0.05
 		transition.material.set("shader_parameter/progress", amt)
 		await get_tree().create_timer(0.01).timeout
 		
 func transition_out():
 	var amt = 1.0
 	while amt <= 1:
-		amt -= 0.1
+		amt -= 0.05
 		transition.material.set("shader_parameter/progress", amt)
 		await get_tree().create_timer(0.01).timeout
