@@ -6,7 +6,7 @@ extends CharacterBody3D
 
 @export var base_speed = 12
 @export var sprint_speed = 16
-@export var jump_velocity = 5
+@export var jump_velocity = 6
 @export var sensitivity = 0.1
 @export var accel = 10
 @export var crouch_speed = 3
@@ -73,7 +73,7 @@ func show_glitch():
 		#parts.bw_shader.visible = false
 
 func wall_run(delta):
-	if w_runnable and is_on_wall():
+	if w_runnable and is_on_wall_only():
 		parts.camera.rotation_degrees.y = lerp(parts.camera.rotation_degrees.y, float(parts.camera.rotation_degrees.y), 0.0)
 		wall_normal = get_slide_collision(0).get_normal()
 		velocity = Vector3(velocity.x ,0, velocity.z)
@@ -155,8 +155,8 @@ func _process(delta):
 		parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[1], 10*delta)
 		parts.body.scale.y = lerp(parts.body.scale.y, crouch_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
 		parts.collision.scale.y = lerp(parts.collision.scale.y, crouch_player_y_scale, 20*delta)
-		velocity.x += (slide_direction.x * slide_speed) / (10 * delta)
-		velocity.z += (slide_direction.z * slide_speed) / (10 * delta)
+		velocity.x += (slide_direction.x * slide_speed) / (10 * delta) 
+		velocity.z += (slide_direction.z * slide_speed) / (10 * delta) 
 		
 	else:
 		#sprinting = false
@@ -175,7 +175,7 @@ func slam():
 	if not is_multiplayer_authority(): return
 	if not is_on_floor() and (state == State.SLAMMING):
 		significant_action.emit()
-		velocity = Vector3.DOWN * 100
+		velocity = Vector3(velocity.x, -50, velocity.z)
 		state = State.SLAMMING
 
 func jump():
@@ -183,8 +183,8 @@ func jump():
 	if (is_on_floor() or jump_count < 3 or is_on_wall()) and state == State.JUMPING:
 		velocity.y += jump_velocity
 		jump_count += 1
-		if jump_count == 3:
-			velocity *= Vector3(-1, 1, -1)
+		#if jump_count == 3:
+			#velocity *= Vector3(1, 1, 1)
 		timer.start()
 
 func _physics_process(delta):
@@ -194,6 +194,8 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= (gravity * 1.3) * delta
 		w_runnable = true
+		#velocity.x = lerp(velocity.x, direction.x * 2, accel * delta)
+		#velocity.z = lerp(velocity.z, direction.z * 2, accel * delta)
 		state = State.FALLING
 	else:
 		if not state == State.SLIDING:
@@ -206,7 +208,7 @@ func _physics_process(delta):
 	if not is_on_wall():
 		_reset_camera_rotation()
 
-	if Input.is_action_just_pressed("MOVE_SLAM"):
+	if Input.is_action_just_pressed("MOVE_SLIDE"):
 		if not is_on_floor() and not (state == State.WALL_RUNNING):
 			state = State.SLAMMING
 			slam()

@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 window/size/viewport_width=960
 window/size/viewport_height=540
 
+[filesystem]
+
+import/fbx/enabled=false
+
 [input]
 
 MOVE_FORWARD={

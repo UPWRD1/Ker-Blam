@@ -6,8 +6,6 @@
 [ext_resource type="Theme" uid="uid://dvv2kyy22v48r" path="res://menu_secondary_theme.tres" id="3_dsos3"]
 [ext_resource type="Theme" uid="uid://k7fq62ur2t8i" path="res://menu_text_entry_theme.tres" id="4_ikv7p"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsm67"]
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lpumu"]
 bg_color = Color(1, 1, 1, 1)
 
@@ -15,6 +13,8 @@ bg_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w4brg"]
 bg_color = Color(0.0745098, 0.560784, 1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsm67"]
 
 [sub_resource type="Gradient" id="Gradient_831j0"]
 
@@ -55,19 +55,6 @@ visibility_layer = 2
 z_index = -1
 layout_mode = 2
 
-[node name="QuitButton" type="Button" parent="CanvasLayer/Menu1/ColorRect"]
-z_index = 3
-layout_mode = 2
-offset_left = 104.0
-offset_top = 432.0
-offset_right = 384.0
-offset_bottom = 482.0
-theme = ExtResource("3_dsos3")
-theme_override_constants/outline_size = 0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_wsm67")
-text = "QUIT"
-alignment = 0
-
 [node name="MainMenu" type="PanelContainer" parent="CanvasLayer/Menu1/ColorRect"]
 layout_mode = 1
 anchors_preset = 15
@@ -93,10 +80,9 @@ layout_mode = 2
 theme_override_constants/separation = 15
 alignment = 1
 
-[node name="Label" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
+[node name="PlayButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_144my")
-theme_override_colors/font_color = Color(0.117647, 0.117647, 0.117647, 1)
 theme_override_styles/normal = SubResource("StyleBoxEmpty_vm7v4")
 theme_override_styles/hover = SubResource("StyleBoxFlat_w4brg")
 text = " PLAY"
@@ -113,6 +99,14 @@ alignment = 0
 layout_mode = 2
 theme = ExtResource("3_dsos3")
 text = "  OPTIONS"
+alignment = 0
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_dsos3")
+theme_override_constants/outline_size = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wsm67")
+text = "  QUIT"
 alignment = 0
 
 [node name="Menu2" type="PanelContainer" parent="CanvasLayer"]
@@ -179,6 +173,8 @@ layout_mode = 2
 theme = ExtResource("4_ikv7p")
 placeholder_text = " Enter address port"
 
+[node name="Node" type="Node" parent="CanvasLayer/Menu2"]
+
 [node name="main" parent="." instance=ExtResource("1_u6hpc")]
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
@@ -195,8 +191,8 @@ environment = SubResource("Environment_2xigm")
 _spawnable_scenes = PackedStringArray("res://Player.tscn")
 spawn_path = NodePath("..")
 
-[connection signal="pressed" from="CanvasLayer/Menu1/ColorRect/QuitButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]

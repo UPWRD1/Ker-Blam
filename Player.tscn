@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://kmyakts4l64t" path="res://addons/Basic FPS Player/Src/basic_player_head.tscn" id="2_dl8kq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_li7ud"]
+radius = 0.284445
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_m01r7"]
 
@@ -23,7 +24,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 script = ExtResource("1_jcs1m")
 
 [node name="Head" parent="." instance=ExtResource("2_dl8kq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.412659, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.696586, -0.0470605)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_li7ud")
@@ -32,6 +33,7 @@ disabled = true
 [node name="Timer" type="Timer" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("CapsuleMesh_m01r7")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
