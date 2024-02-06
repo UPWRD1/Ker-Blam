@@ -26,35 +26,6 @@ script = ExtResource("1_jcs1m")
 [node name="Head" parent="." instance=ExtResource("2_dl8kq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.047)
 
-[node name="ChestRays" type="Node3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0.047)
-
-[node name="RayCast3D" type="RayCast3D" parent="Head/ChestRays"]
-target_position = Vector3(0, 0, -2)
-
-[node name="HeadRays" type="Node3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.226807, 0.047)
-
-[node name="Left" type="RayCast3D" parent="Head/HeadRays"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-target_position = Vector3(-1, 1, -1)
-
-[node name="Center" type="RayCast3D" parent="Head/HeadRays"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-target_position = Vector3(0, 1, -1)
-
-[node name="Right" type="RayCast3D" parent="Head/HeadRays"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-target_position = Vector3(1, 1, -1)
-
-[node name="SideRays" type="Node3D" parent="Head"]
-
-[node name="Left" type="RayCast3D" parent="Head/SideRays"]
-target_position = Vector3(-1, 0, 0)
-
-[node name="Right" type="RayCast3D" parent="Head/SideRays"]
-target_position = Vector3(1, 0, 0)
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_li7ud")
 disabled = true
@@ -66,3 +37,21 @@ mesh = SubResource("CapsuleMesh_m01r7")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_wmvk8")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -2)
+
+[node name="HeadRays" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.635253, 0)
+
+[node name="Left" type="RayCast3D" parent="HeadRays"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+target_position = Vector3(-1, 1, -1)
+
+[node name="Center" type="RayCast3D" parent="HeadRays"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+target_position = Vector3(0, 1, -1)
+
+[node name="Right" type="RayCast3D" parent="HeadRays"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+target_position = Vector3(1, 1, -1)

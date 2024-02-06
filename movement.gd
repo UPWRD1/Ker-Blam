@@ -50,6 +50,10 @@ var jump_count = 0
 	"camera": $Head/Camera3D,
 	"body": $CollisionShape3D,
 	"collision": $CollisionShape3D,
+	"headrays": $Head/HeadRays,
+	"chestrays": $Head/ChestRays,
+	"leftray": $Head/SideRays/Left,
+	"rightray": $Head/SideRays/Right,
 	"timer": $Timer,
 }
 #@onready var world = get_parent()
@@ -64,14 +68,61 @@ var side = Vector3()
 
 var iscaptured: bool
 
-func show_glitch():
-	pass
-	#if is_sigact:
-	#	parts.glitch_shader.visible = true
-#		parts.bw_shader.visible = true
-#	else:
-#		parts.glitch_shader.visible = false
-		#parts.bw_shader.visible = false
+
+# Functions for movement
+func can_climb():
+	if state != State.SLIDING:
+		for ray in parts.chestrays.get_children():
+			if ray.is_colliding():
+				for ray2 in parts.headrays.get_children():
+					if ray2.is_colliding():
+						return false
+				return true
+			else:
+				return false
+	else:
+		return false
+
+	
+	
+func climb():
+	# Movement Restrictions
+	velocity = Vector3.ZERO
+	
+	var v_move_time := 0.2
+	var h_move_time := 0.2
+	if state != State.SLIDING || state != State.WALL_RUNNING:
+		# Vertical Transforms
+		var vertical_movement = global_transform.origin + Vector3(0,1.85,0)
+		var vm_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		var camera_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		
+		vm_tween.tween_property(self, "global_transform:origin", vertical_movement, v_move_time)
+		camera_tween.tween_property(parts.camera, "rotation_degrees:x", clamp(parts.camera.rotation_degrees.x - 10,-85,90), v_move_time)
+		camera_tween.tween_property(parts.camera, "rotation_degrees:z", -5.0*sign(randf_range(-10000,10000)), v_move_time)
+		
+		await vm_tween.finished
+		
+		# Horizontal Transforms
+		var forward_movement = global_transform.origin + (-parts.head.basis.z * 1.2)
+		var fm_tween = get_tree().create_tween().set_trans(Tween.TRANS_LINEAR)
+		var camera_reset = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		fm_tween.tween_property(self, "global_transform:origin", forward_movement, h_move_time)
+		camera_reset.tween_property(parts.camera, "rotation_degrees:x", 0.0, h_move_time)
+		camera_reset.tween_property(parts.camera, "rotation_degrees:z", 0.0, h_move_time)
+	else:
+		var vertical_movement = global_transform.origin + Vector3(0,1.05,0)
+		# Vertical Transform
+		var vm_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		vm_tween.tween_property(self,"global_transform:origin",vertical_movement,v_move_time)
+		
+		await vm_tween.finished
+		
+		# Horizontal Transform
+		var forward_movement = global_transform.origin + (-global_transform.basis.z * 1.2)
+		var fm_tween = get_tree().create_tween().set_trans(Tween.TRANS_LINEAR)
+		fm_tween.tween_property(self,"global_transform:origin",forward_movement,h_move_time)
+	# Reset Restrictions
 
 func wall_run(delta):
 	if w_runnable and is_on_wall_only():
@@ -95,20 +146,12 @@ func wall_run(delta):
 				jump_count = 0
 		if not is_on_floor():
 			var to_rot
-			if abs(fmod(parts.head.rotation_degrees.y, 360.0)) < 90.0:
-				if side.dot(Vector3.RIGHT) > 0:
-					to_rot = wallrun_angle
-					#print("a", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
-				else:
-					to_rot = -wallrun_angle
-					#rint("b", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
+			if parts.leftray.is_colliding():
+				to_rot = -wallrun_angle
+			elif parts.rightray.is_colliding():
+				to_rot = wallrun_angle
 			else:
-				if side.dot(Vector3.RIGHT) <= 0:
-					to_rot = wallrun_angle
-					#print("c", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
-				else:
-					to_rot = -wallrun_angle
-					#print("d", to_rot , " " , abs(fmod(parts.head.rotation_degrees.y, 360.0)), " ", side.dot(Vector3.RIGHT))
+				to_rot = 0.0
 
 		# Set the rotation directly
 			parts.camera.rotation_degrees.z = lerp(parts.camera.rotation_degrees.z, float(to_rot), 0.1)
@@ -141,7 +184,7 @@ func _process(delta):
 	if not is_multiplayer_authority(): return
 	
 	escape()
-	show_glitch()
+
 	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
 		var slide_direction = Vector3()
 		if !slide_started and is_on_floor():
@@ -190,6 +233,8 @@ func jump():
 func _physics_process(delta):
 	if not is_multiplayer_authority(): return
 	wall_run(delta)
+	
+	#print(can_climb())
 
 	if not is_on_floor():
 		velocity.y -= (gravity * 1.3) * delta
@@ -215,8 +260,11 @@ func _physics_process(delta):
 			  # Reset camera rotation when on floor
 
 	if Input.is_action_just_pressed("MOVE_JUMP"):
-		state = State.JUMPING
-		jump()
+		if can_climb():
+			climb()
+		else:
+			state = State.JUMPING
+			jump()
 
 	var input_dir = Input.get_vector("MOVE_LEFT", "MOVE_RIGHT", "MOVE_FORWARD", "MOVE_BACKWARD")
 	direction = input_dir.normalized().rotated(-parts.head.rotation.y)
@@ -240,8 +288,9 @@ func _input(event):
 	if not is_multiplayer_authority(): return
 
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		if not is_on_wall_only():
-			parts.head.rotation_degrees.y -= event.relative.x * sensitivity
+		#if not is_on_wall_only():
+			#parts.head.rotation_degrees.y -= event.relative.x * sensitivity
+		parts.head.rotation_degrees.y -= event.relative.x * sensitivity
 		parts.head.rotation_degrees.x -= event.relative.y * sensitivity
 		parts.head.rotation.x = clamp(parts.head.rotation.x, deg_to_rad(-90), deg_to_rad(90))	
 
