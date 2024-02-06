@@ -5,8 +5,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp2dt"]
 bg_color = Color(0.266667, 0.560784, 1, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pkxle"]
-bg_color = Color(1, 1, 1, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_em8ou"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wpmg"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
@@ -20,5 +19,5 @@ Button/colors/font_hover_color = Color(1, 1, 1, 1)
 Button/colors/font_hover_pressed_color = Color(0.117647, 0.117647, 0.117647, 1)
 Button/colors/font_pressed_color = Color(1, 1, 1, 1)
 Button/styles/hover = SubResource("StyleBoxFlat_hp2dt")
-Button/styles/normal = SubResource("StyleBoxFlat_pkxle")
+Button/styles/normal = SubResource("StyleBoxEmpty_em8ou")
 Button/styles/pressed = SubResource("StyleBoxFlat_0wpmg")

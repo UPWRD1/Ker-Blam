@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://vupfism0y8ub"]
+[gd_scene load_steps=17 format=3 uid="uid://vupfism0y8ub"]
 
 [ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://textures/dark.png" id="4_6421s"]
 [ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://textures/green.png" id="7_gw5sn"]
@@ -83,6 +83,21 @@ albedo_texture = ExtResource("8_r2t6e")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eik52"]
 albedo_texture = ExtResource("9_qusmc")
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kw0vv"]
+
+[sub_resource type="Sky" id="Sky_ieq45"]
+sky_material = SubResource("ProceduralSkyMaterial_kw0vv")
+process_mode = 1
+
+[sub_resource type="Environment" id="Environment_jdjqb"]
+background_mode = 2
+sky = SubResource("Sky_ieq45")
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.65
+reflected_light_source = 2
+tonemap_mode = 2
+
 [node name="main" type="Node3D"]
 
 [node name="Floor" type="StaticBody3D" parent="."]
@@ -161,3 +176,6 @@ size = Vector3(10.75, 5, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.5783, 1.12536, -29.1016)
 use_collision = true
 size = Vector3(5, 2.5, 5)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_jdjqb")

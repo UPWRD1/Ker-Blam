@@ -1,9 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://dgww5i06smk8l"]
+[gd_scene load_steps=18 format=3 uid="uid://dgww5i06smk8l"]
 
 [ext_resource type="Script" path="res://scenes/menu.gd" id="1_d5m2f"]
 [ext_resource type="PackedScene" uid="uid://vupfism0y8ub" path="res://scenes/main.tscn" id="1_u6hpc"]
 [ext_resource type="Theme" uid="uid://htljjiwxx5yv" path="res://menu_primary_theme.tres" id="2_144my"]
 [ext_resource type="Theme" uid="uid://dvv2kyy22v48r" path="res://menu_secondary_theme.tres" id="3_dsos3"]
+[ext_resource type="Shader" path="res://scenes/particles.gdshader" id="3_kt46j"]
+[ext_resource type="Texture2D" uid="uid://b3ng7slf71a04" path="res://textures/Frame 1 (13).png" id="4_gpjoo"]
 [ext_resource type="Theme" uid="uid://k7fq62ur2t8i" path="res://menu_text_entry_theme.tres" id="4_ikv7p"]
 [ext_resource type="Shader" path="res://scenes/transition_1.gdshader" id="5_bayir"]
 
@@ -13,8 +15,25 @@ shader = ExtResource("5_bayir")
 shader_parameter/progress = 0.0
 shader_parameter/diamondPixelSize = 20.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_45ajv"]
+shader = ExtResource("3_kt46j")
+shader_parameter/dimensions = Vector2(1152, 648)
+shader_parameter/rows = 20.0
+shader_parameter/columns = 5.0
+shader_parameter/vertical_scroll = 0.06
+shader_parameter/horizontal_scroll = 0.05
+shader_parameter/size_min = 0.2
+shader_parameter/size_max = 0.6
+shader_parameter/wave_min = 0.1
+shader_parameter/wave_max = 1.0
+shader_parameter/wave_speed = 0.1
+shader_parameter/wave_rotation = 1.0
+shader_parameter/far_color = Color(0.117647, 0.117647, 0.117647, 1)
+shader_parameter/near_color = Color(1, 1, 1, 1)
+shader_parameter/particle_texture = ExtResource("4_gpjoo")
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lpumu"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(1, 1, 1, 0)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsm67"]
 
@@ -62,6 +81,7 @@ grow_vertical = 2
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/Menu1"]
 light_mask = 2
 visibility_layer = 2
+material = SubResource("ShaderMaterial_45ajv")
 layout_mode = 2
 
 [node name="MainMenu" type="PanelContainer" parent="CanvasLayer/Menu1/ColorRect"]
