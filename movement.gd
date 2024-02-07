@@ -4,9 +4,9 @@ extends CharacterBody3D
 #@export var crouch_enabled = true
 @export var slide_enabled = true
 
-@export var base_speed = 12
-@export var sprint_speed = 16
-@export var wall_speed = 30
+@export var base_speed = 20
+@export var sprint_speed = 30
+@export var wall_speed = 50
 @export var jump_velocity = 6
 @export var sensitivity = 0.1
 @export var accel = 10
@@ -221,7 +221,7 @@ func slam():
 	if not is_multiplayer_authority(): return
 	if not is_on_floor() and (state == State.SLAMMING):
 		significant_action.emit()
-		velocity = Vector3(velocity.x, -50, velocity.z)
+		velocity = Vector3(direction.x * 15, -50, direction.z * 15)
 		state = State.SLAMMING
 
 func jump():
