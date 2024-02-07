@@ -37,7 +37,7 @@ func _on_host_button_pressed():
 	add_player(multiplayer.get_unique_id())
 	transition_out()
 	
-	upnp_setup()
+	#upnp_setup()
 
 func _on_join_button_pressed():
 	transition_in()

@@ -4,8 +4,8 @@ extends CharacterBody3D
 #@export var crouch_enabled = true
 @export var slide_enabled = true
 
-@export var base_speed = 20
-@export var sprint_speed = 30
+@export var base_speed = 15
+@export var sprint_speed = 20
 @export var wall_speed = 50
 @export var jump_velocity = 6
 @export var sensitivity = 0.1

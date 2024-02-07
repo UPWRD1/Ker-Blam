@@ -93,9 +93,11 @@ sky_material = SubResource("PanoramaSkyMaterial_smt2o")
 [sub_resource type="Environment" id="Environment_jdjqb"]
 background_mode = 2
 sky = SubResource("Sky_q8t4b")
+ambient_light_source = 3
 ambient_light_color = Color(0.423529, 0.423529, 0.423529, 1)
 ambient_light_sky_contribution = 0.61
 ambient_light_energy = 3.0
+reflected_light_source = 2
 tonemap_mode = 2
 tonemap_white = 8.13
 adjustment_enabled = true
