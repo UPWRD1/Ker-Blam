@@ -1,7 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://vupfism0y8ub"]
+[gd_scene load_steps=20 format=3 uid="uid://vupfism0y8ub"]
 
 [ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://textures/dark.png" id="4_6421s"]
-[ext_resource type="Texture2D" uid="uid://boqnb8j1wjtws" path="res://hochsal_field_4k.exr" id="5_1mgo2"]
+[ext_resource type="Texture2D" uid="uid://bhr1wpkt2k856" path="res://textures/rustig_koppie_puresky_4k.exr" id="5_a53ph"]
 [ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://textures/green.png" id="7_gw5sn"]
 [ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://textures/orange.png" id="8_r2t6e"]
 [ext_resource type="Texture2D" uid="uid://cl4kewig3pk7s" path="res://textures/purple.png" id="9_qusmc"]
@@ -84,8 +84,16 @@ albedo_texture = ExtResource("8_r2t6e")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eik52"]
 albedo_texture = ExtResource("9_qusmc")
 
+[sub_resource type="Gradient" id="Gradient_ml3ci"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.275568, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.144838, 0.144838, 0.144838, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hh7h8"]
+gradient = SubResource("Gradient_ml3ci")
+
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_smt2o"]
-panorama = ExtResource("5_1mgo2")
+panorama = ExtResource("5_a53ph")
 
 [sub_resource type="Sky" id="Sky_q8t4b"]
 sky_material = SubResource("PanoramaSkyMaterial_smt2o")
@@ -99,8 +107,21 @@ ambient_light_sky_contribution = 0.61
 ambient_light_energy = 3.0
 reflected_light_source = 2
 tonemap_mode = 2
-tonemap_white = 8.13
+tonemap_white = 14.88
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 0.25
+glow_strength = 1.21
+glow_bloom = 0.25
+fog_enabled = true
+fog_sky_affect = 0.0
+volumetric_fog_density = 0.01
+volumetric_fog_emission = Color(0.407843, 0.462745, 0.639216, 1)
+volumetric_fog_length = 214.59
+volumetric_fog_detail_spread = 5.4075
+volumetric_fog_sky_affect = 0.1
 adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture2D_hh7h8")
 
 [node name="main" type="Node3D"]
 
@@ -185,7 +206,7 @@ size = Vector3(5, 2.5, 5)
 environment = SubResource("Environment_jdjqb")
 
 [node name="Sun" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(-0.811772, -0.263895, -0.520947, 0.0365591, -0.913287, 0.405673, -0.582829, 0.310268, 0.751028, -5.87804, 12.7397, -4.4998)
+transform = Transform3D(-0.695394, -0.31479, -0.646014, 0.133821, -0.939954, 0.313971, -0.706059, 0.131883, 0.695764, -5.7519, 12.3159, -4.4998)
 light_energy = 2.0
 light_indirect_energy = 3.166
 shadow_enabled = true

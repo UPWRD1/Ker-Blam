@@ -128,7 +128,7 @@ func climb():
 	velocity = velocity + Vector3(velocity.x, velocity.y, velocity.z * 1.5)
 
 func wall_run(delta):
-	if w_runnable and is_on_wall_only():
+	if w_runnable and is_on_wall_only() and (parts.leftray.is_colliding() or parts.rightray.is_colliding()):
 		parts.camera.rotation_degrees.y = lerp(parts.camera.rotation_degrees.y, float(parts.camera.rotation_degrees.y), 0.0)
 		wall_normal = get_slide_collision(0).get_normal()
 		velocity = Vector3(velocity.x, 0, velocity.z)
@@ -221,7 +221,7 @@ func slam():
 	if not is_multiplayer_authority(): return
 	if not is_on_floor() and (state == State.SLAMMING):
 		significant_action.emit()
-		velocity = Vector3(direction.x * 15, -50, direction.z * 15)
+		velocity = Vector3(direction.x * 15, 0, direction.z * 15)
 		state = State.SLAMMING
 
 func jump():

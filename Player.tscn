@@ -50,10 +50,10 @@ target_position = Vector3(1, 1, -1)
 [node name="SideRays" type="Node3D" parent="Head"]
 
 [node name="Left" type="RayCast3D" parent="Head/SideRays"]
-target_position = Vector3(-1, 0, 0)
+target_position = Vector3(-2, 0, 0)
 
 [node name="Right" type="RayCast3D" parent="Head/SideRays"]
-target_position = Vector3(1, 0, 0)
+target_position = Vector3(2, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_li7ud")
