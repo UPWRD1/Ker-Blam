@@ -213,3 +213,10 @@ shadow_enabled = true
 shadow_normal_bias = 0.729
 shadow_opacity = 0.85
 shadow_blur = 0.98
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 10, 0, 0, 0, 1, 4, 0.754, -48.5618)
+use_collision = true
+inner_radius = 15.125
+outer_radius = 16.055
+sides = 64

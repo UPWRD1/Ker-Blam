@@ -17,6 +17,10 @@ extends CharacterBody3D
 
 signal significant_action
 
+signal enter_flow
+signal exit_flow
+
+
 enum State {
 	WALKING,
 	JUMPING,
@@ -185,7 +189,13 @@ func escape():
 
 func _process(delta):
 	if not is_multiplayer_authority(): return
+	print(velocity)
 	
+	if abs(velocity.x) >  14.0 or abs(velocity.z) > 14.0:
+		enter_flow.emit()
+	else:
+		exit_flow.emit()
+
 	escape()
 
 	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
