@@ -1,10 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://vupfism0y8ub"]
+[gd_scene load_steps=20 format=3 uid="uid://cuawnyag0ueoe"]
 
-[ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://textures/dark.png" id="4_6421s"]
-[ext_resource type="Texture2D" uid="uid://bhr1wpkt2k856" path="res://textures/rustig_koppie_puresky_4k.exr" id="5_a53ph"]
-[ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://textures/green.png" id="7_gw5sn"]
-[ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://textures/orange.png" id="8_r2t6e"]
-[ext_resource type="Texture2D" uid="uid://cl4kewig3pk7s" path="res://textures/purple.png" id="9_qusmc"]
+[ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://textures/dark.png" id="1_cypd8"]
+[ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://textures/green.png" id="2_5mawr"]
+[ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://textures/orange.png" id="3_pt8uq"]
+[ext_resource type="Texture2D" uid="uid://cl4kewig3pk7s" path="res://textures/purple.png" id="4_qpfyy"]
+[ext_resource type="Texture2D" uid="uid://bhr1wpkt2k856" path="res://textures/rustig_koppie_puresky_4k.exr" id="5_gkqsi"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_caja7"]
 size = Vector3(50, 0, 50)
@@ -64,25 +64,25 @@ shader_parameter/uv1_scale = Vector3(100, 100, 100)
 shader_parameter/uv1_offset = Vector3(0, 0, 0)
 shader_parameter/uv2_scale = Vector3(100, 100, 100)
 shader_parameter/uv2_offset = Vector3(0, 0, 0)
-shader_parameter/texture_albedo = ExtResource("4_6421s")
+shader_parameter/texture_albedo = ExtResource("1_cypd8")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_6b5j0"]
 size = Vector2(50, 50)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tphqv"]
-albedo_texture = ExtResource("7_gw5sn")
+albedo_texture = ExtResource("2_5mawr")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k2so5"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_pt8uq")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gak8a"]
-albedo_texture = ExtResource("7_gw5sn")
+albedo_texture = ExtResource("2_5mawr")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jrl3v"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_pt8uq")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eik52"]
-albedo_texture = ExtResource("9_qusmc")
+albedo_texture = ExtResource("4_qpfyy")
 
 [sub_resource type="Gradient" id="Gradient_ml3ci"]
 interpolation_color_space = 2
@@ -93,7 +93,7 @@ colors = PackedColorArray(0, 0, 0, 1, 0.144838, 0.144838, 0.144838, 1, 1, 1, 1, 
 gradient = SubResource("Gradient_ml3ci")
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_smt2o"]
-panorama = ExtResource("5_a53ph")
+panorama = ExtResource("5_gkqsi")
 
 [sub_resource type="Sky" id="Sky_q8t4b"]
 sky_material = SubResource("PanoramaSkyMaterial_smt2o")
