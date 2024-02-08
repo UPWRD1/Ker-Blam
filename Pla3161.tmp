@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://ddycyagkmbqcf"]
 
-[ext_resource type="Script" path="res://cleaned_movement.gd" id="1_yj6f0"]
+[ext_resource type="Script" path="res://movement.gd" id="1_jcs1m"]
 [ext_resource type="PackedScene" uid="uid://kmyakts4l64t" path="res://addons/Basic FPS Player/Src/basic_player_head.tscn" id="2_dl8kq"]
 [ext_resource type="Shader" path="res://addons/Basic FPS Player/Src/speed.gdshader" id="3_b7mjl"]
 [ext_resource type="Script" path="res://addons/Basic FPS Player/Src/speedlines.gd" id="4_lnrgx"]
@@ -45,7 +45,7 @@ properties/2/replication_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4361, 0)
 floor_stop_on_slope = false
 floor_constant_speed = true
-script = ExtResource("1_yj6f0")
+script = ExtResource("1_jcs1m")
 
 [node name="Head" parent="." instance=ExtResource("2_dl8kq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.047)
