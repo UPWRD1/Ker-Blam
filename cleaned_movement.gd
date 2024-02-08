@@ -87,37 +87,46 @@ func can_climb():
 			return false
 	else:
 		return false
+#
+#func climb():
+	##var cv = direction
+	## Movement Restrictions
+	##velocity = Vector3.ZERO
+	#
+	#var v_move_time := 0.2
+	#var h_move_time := 0.2
+	#if state != State.SLIDING || state != State.WALL_RUNNING:
+		## Vertical Transforms
+		#var vertical_movement = global_transform.origin + Vector3(0,1.85,0)
+		#var vm_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		#var camera_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		#var body_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		#vm_tween.tween_property(self, "global_transform:origin", vertical_movement, v_move_time)
+		#body_tween.tween_property(self, "scale", 0.5, v_move_time)
+		#camera_tween.tween_property(parts.camera, "rotation_degrees:x", clamp(parts.camera.rotation_degrees.x - 10,-85,90), v_move_time)
+		#camera_tween.tween_property(parts.camera, "rotation_degrees:z", -5.0*sign(randf_range(-10000,10000)), v_move_time)
+		#
+		#await vm_tween.finished
+		##
+		### Horizontal Transforms
+		##var forward_movement = global_transform.origin + (-parts.head.basis.z * 1.2)
+		##var fm_tween = get_tree().create_tween().set_trans(Tween.TRANS_LINEAR)
+		##var camera_reset = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		##fm_tween.tween_property(self, "global_transform:origin", forward_movement, h_move_time)
+		##camera_reset.tween_property(parts.camera, "rotation_degrees:x", 0.0, h_move_time)
+		##camera_reset.tween_property(parts.camera, "rotation_degrees:z", 0.0, h_move_time)
+		#body_tween.tween_property(self, "scale", 1, v_move_time)
+	## Reset Restrictions
+	##velocity = Vector3(cv.x * 1.5, cv.y * 1.5, cv.z * 1.5)
+	##velocity *= cv
 
-func climb():
-	var cv = direction
-	# Movement Restrictions
-	#velocity = Vector3.ZERO
+func climb(delta):
+	parts.body.scale.y = lerp(parts.body.scale.y, crouch_player_y_scale, delta)
+	velocity.y += jump_velocity / 1.2
+	await get_tree().create_timer(0.125).timeout
+	velocity += direction * Vector3(10,1,10)
+	parts.body.scale.y = lerp(parts.body.scale.y, base_player_y_scale, delta)
 	
-	var v_move_time := 0.2
-	var h_move_time := 0.2
-	if state != State.SLIDING || state != State.WALL_RUNNING:
-		# Vertical Transforms
-		var vertical_movement = global_transform.origin + Vector3(0,1.85,0)
-		var vm_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		var camera_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		
-		vm_tween.tween_property(self, "global_transform:origin", vertical_movement, v_move_time)
-		camera_tween.tween_property(parts.camera, "rotation_degrees:x", clamp(parts.camera.rotation_degrees.x - 10,-85,90), v_move_time)
-		camera_tween.tween_property(parts.camera, "rotation_degrees:z", -5.0*sign(randf_range(-10000,10000)), v_move_time)
-		
-		await vm_tween.finished
-		
-		# Horizontal Transforms
-		var forward_movement = global_transform.origin + (-parts.head.basis.z * 5.2)
-		var fm_tween = get_tree().create_tween().set_trans(Tween.TRANS_LINEAR)
-		var camera_reset = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		fm_tween.tween_property(self, "global_transform:origin", forward_movement, h_move_time)
-		camera_reset.tween_property(parts.camera, "rotation_degrees:x", 0.0, h_move_time)
-		camera_reset.tween_property(parts.camera, "rotation_degrees:z", 0.0, h_move_time)
-
-	# Reset Restrictions
-	#velocity = Vector3(cv.x * 1.5, cv.y * 1.5, cv.z * 1.5)
-	velocity *= cv
 
 func wall_run(delta):
 	if w_runnable and is_on_wall_only() and (parts.leftray.is_colliding() or parts.rightray.is_colliding()):
@@ -218,8 +227,11 @@ func _process(delta):
 	direction = Vector3(direction.x, 0, direction.y)
 
 	if Input.is_action_just_pressed("MOVE_JUMP"):
-		state = State.JUMPING
-		await get_tree().create_timer(0.1).timeout
+		if can_climb():
+			climb(delta)
+		else:
+			state = State.JUMPING
+			await get_tree().create_timer(0.1).timeout
 	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
 		state = State.SLIDING
 	else:
@@ -236,7 +248,7 @@ func _physics_process(delta):
 	elif state == State.JUMPING:
 		jump()
 	elif state == State.CLIMBING:
-		climb()
+		climb(delta)
 	elif state == State.SLIDING:
 		slide(delta)
 	
@@ -249,8 +261,8 @@ func _physics_process(delta):
 		velocity.y -= (gravity * 1.3) * delta
 		w_runnable = true
 		if not is_on_wall():
-			velocity.x += direction.x / 5
-			velocity.z += direction.z / 5
+			velocity.x += direction.x / 10
+			velocity.z += direction.z / 10
 		state = State.FALLING
 	else:
 		if not state == State.SLIDING:

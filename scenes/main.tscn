@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://vupfism0y8ub"]
+[gd_scene load_steps=32 format=3 uid="uid://vupfism0y8ub"]
 
 [ext_resource type="Material" uid="uid://bkrj8rd5bxo1t" path="res://floor.tres" id="2_p145e"]
 [ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://textures/dark.png" id="4_6421s"]
@@ -102,6 +102,9 @@ albedo_texture = ExtResource("9_qusmc")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mlf04"]
 albedo_texture = ExtResource("4_6421s")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cpjk1"]
+albedo_texture = ExtResource("8_r2t6e")
 
 [node name="main" type="Node3D"]
 
@@ -261,7 +264,32 @@ use_collision = true
 size = Vector3(20, 5, 5)
 
 [node name="WallBounceR2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 5, -20)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 5, -40)
 material_override = SubResource("StandardMaterial3D_k2so5")
 use_collision = true
-size = Vector3(20, 10, 1)
+size = Vector3(20, 20, 1)
+
+[node name="WallBounceR3" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 5, -30)
+material_override = SubResource("StandardMaterial3D_cpjk1")
+use_collision = true
+size = Vector3(20, 20, 1)
+
+[node name="WallBounceR4" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 5, -30)
+material_override = SubResource("StandardMaterial3D_k2so5")
+use_collision = true
+size = Vector3(20, 20, 1)
+
+[node name="WallBounceR5" type="CSGBox3D" parent="WallBounceR4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0249996, 2, 0)
+material_override = SubResource("StandardMaterial3D_k2so5")
+operation = 2
+use_collision = true
+size = Vector3(5, 7, 5)
+
+[node name="Hurdle4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.7, -39.9767)
+material_override = SubResource("StandardMaterial3D_5tb26")
+use_collision = true
+size = Vector3(1, 1, 5)
