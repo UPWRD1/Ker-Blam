@@ -5,7 +5,7 @@
 [ext_resource type="Theme" uid="uid://htljjiwxx5yv" path="res://menu_primary_theme.tres" id="2_144my"]
 [ext_resource type="Theme" uid="uid://dvv2kyy22v48r" path="res://menu_secondary_theme.tres" id="3_dsos3"]
 [ext_resource type="Shader" path="res://scenes/particles.gdshader" id="3_kt46j"]
-[ext_resource type="Texture2D" uid="uid://b3ng7slf71a04" path="res://textures/Frame 1 (13).png" id="4_gpjoo"]
+[ext_resource type="Texture2D" uid="uid://b3ng7slf71a04" path="res://Frame 1 (13).png" id="4_gpjoo"]
 [ext_resource type="Theme" uid="uid://k7fq62ur2t8i" path="res://menu_text_entry_theme.tres" id="4_ikv7p"]
 [ext_resource type="Shader" path="res://scenes/transition_1.gdshader" id="5_bayir"]
 
