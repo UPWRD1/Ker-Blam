@@ -181,8 +181,9 @@ func escape():
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func check_flow():
-	if abs(velocity.x) >  14.0 or abs(velocity.z) > 14.0:
+	if abs(velocity.x) >  20.0 or abs(velocity.z) > 20.0:
 		enter_flow.emit()
+		print(velocity)
 	else:
 		exit_flow.emit()
 
