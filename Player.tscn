@@ -1,10 +1,46 @@
-[gd_scene load_steps=12 format=3 uid="uid://ddycyagkmbqcf"]
+[gd_scene load_steps=14 format=3 uid="uid://ddycyagkmbqcf"]
 
 [ext_resource type="Script" path="res://cleaned_movement.gd" id="1_yj6f0"]
-[ext_resource type="PackedScene" uid="uid://kmyakts4l64t" path="res://addons/Basic FPS Player/Src/basic_player_head.tscn" id="2_dl8kq"]
 [ext_resource type="Shader" path="res://vignette.gdshader" id="3_djmk4"]
 [ext_resource type="Script" path="res://addons/Basic FPS Player/Src/speedlines.gd" id="4_lnrgx"]
 [ext_resource type="Shader" path="res://outline.gdshader" id="5_csmif"]
+
+[sub_resource type="Animation" id="Animation_ugfgh"]
+resource_name = "Head_Bob"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.150143, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.002, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_7pjgs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hpuff"]
+_data = {
+"Head_Bob": SubResource("Animation_ugfgh"),
+"RESET": SubResource("Animation_7pjgs")
+}
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o00jp"]
 shader = ExtResource("3_djmk4")
@@ -56,8 +92,17 @@ floor_stop_on_slope = false
 floor_constant_speed = true
 script = ExtResource("1_yj6f0")
 
-[node name="Head" parent="." instance=ExtResource("2_dl8kq")]
+[node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.047)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Head/Camera3D"]
+deterministic = true
+libraries = {
+"": SubResource("AnimationLibrary_hpuff")
+}
+speed_scale = 0.5
 
 [node name="ChestRays" type="Node3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0.047)
@@ -70,19 +115,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.562651, 0)
 target_position = Vector3(0, 0, -3)
 
 [node name="HeadRays" type="Node3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.226807, 0.047)
+transform = Transform3D(1, 0, 0, 0, 0.996937, 0.0782155, 0, -0.0782155, 0.996937, 0, -0.226807, 0.047)
 
 [node name="Left" type="RayCast3D" parent="Head/HeadRays"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-target_position = Vector3(-1, 1, -1)
+target_position = Vector3(-2, 1, -2)
 
 [node name="Center" type="RayCast3D" parent="Head/HeadRays"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-target_position = Vector3(0, 1, -1)
+target_position = Vector3(0, 1, -2)
 
 [node name="Right" type="RayCast3D" parent="Head/HeadRays"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-target_position = Vector3(1, 1, -1)
+target_position = Vector3(2, 1, -2)
 
 [node name="SideRays" type="Node3D" parent="Head"]
 
@@ -93,6 +138,7 @@ target_position = Vector3(-2, 0, 0)
 target_position = Vector3(2, 0, 0)
 
 [node name="0_7" type="ColorRect" parent="Head"]
+visible = false
 material = SubResource("ShaderMaterial_o00jp")
 anchors_preset = 15
 anchor_right = 1.0
