@@ -1,0 +1,112 @@
+[gd_scene load_steps=11 format=3 uid="uid://ddycyagkmbqcf"]
+
+[ext_resource type="Script" path="res://cleaned_movement.gd" id="1_yj6f0"]
+[ext_resource type="PackedScene" uid="uid://kmyakts4l64t" path="res://addons/Basic FPS Player/Src/basic_player_head.tscn" id="2_dl8kq"]
+[ext_resource type="Shader" path="res://addons/Basic FPS Player/Src/speed.gdshader" id="3_b7mjl"]
+[ext_resource type="Script" path="res://addons/Basic FPS Player/Src/speedlines.gd" id="4_lnrgx"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_agi3f"]
+frequency = 0.028
+offset = Vector3(-155.25, -38.55, 1000)
+fractal_type = 3
+fractal_lacunarity = 5.0
+fractal_weighted_strength = 1.0
+domain_warp_type = 2
+domain_warp_fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wbpql"]
+noise = SubResource("FastNoiseLite_agi3f")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8tr67"]
+shader = ExtResource("3_b7mjl")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/sample_radius = 0.5
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/center_radius = 0.368
+shader_parameter/noise = SubResource("NoiseTexture2D_wbpql")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_li7ud"]
+radius = 0.284445
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_m01r7"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_wmvk8"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:scale")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[node name="Basic FPS Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4361, 0)
+floor_stop_on_slope = false
+floor_constant_speed = true
+script = ExtResource("1_yj6f0")
+
+[node name="Head" parent="." instance=ExtResource("2_dl8kq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.047)
+
+[node name="ChestRays" type="Node3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0.047)
+
+[node name="RayCast3D" type="RayCast3D" parent="Head/ChestRays"]
+target_position = Vector3(0, 0, -2)
+
+[node name="RayCast3D2" type="RayCast3D" parent="Head/ChestRays"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.562651, 0)
+target_position = Vector3(0, 0, -2)
+
+[node name="HeadRays" type="Node3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.226807, 0.047)
+
+[node name="Left" type="RayCast3D" parent="Head/HeadRays"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+target_position = Vector3(-1, 1, -1)
+
+[node name="Center" type="RayCast3D" parent="Head/HeadRays"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+target_position = Vector3(0, 1, -1)
+
+[node name="Right" type="RayCast3D" parent="Head/HeadRays"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+target_position = Vector3(1, 1, -1)
+
+[node name="SideRays" type="Node3D" parent="Head"]
+
+[node name="Left" type="RayCast3D" parent="Head/SideRays"]
+target_position = Vector3(-2, 0, 0)
+
+[node name="Right" type="RayCast3D" parent="Head/SideRays"]
+target_position = Vector3(2, 0, 0)
+
+[node name="ColorRect2" type="ColorRect" parent="Head"]
+visible = false
+material = SubResource("ShaderMaterial_8tr67")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+script = ExtResource("4_lnrgx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_li7ud")
+disabled = true
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_m01r7")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_wmvk8")
+
+[connection signal="enter_flow" from="." to="Head/ColorRect2" method="_on_basic_fps_player_enter_flow"]
+[connection signal="exit_flow" from="." to="Head/ColorRect2" method="_on_basic_fps_player_exit_flow"]

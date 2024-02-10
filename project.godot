@@ -71,3 +71,4 @@ ACTION_ESCAPE={
 [rendering]
 
 environment/defaults/default_clear_color=Color(1, 1, 1, 1)
+anti_aliasing/quality/screen_space_aa=1
