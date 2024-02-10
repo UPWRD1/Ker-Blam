@@ -12,7 +12,7 @@ extends CharacterBody3D
 @export var accel = 10
 @export var crouch_speed = 3
 @export var slide_speed = 0
-@export var wall_run_tilt_angle : float = 45.0
+@export var wall_run_tilt_angle : float = 15.0
 @export var dash_dist = 10
 
 signal significant_action
@@ -29,16 +29,14 @@ enum State {
 	WALL_JUMPING,
 	SLAMMING,
 	FALLING,
+	CLIMBING,
+	IDLE,
 }
 
 @export var state: State
 
 var is_sigact = false
 var speed = base_speed
-#var sprinting = false
-#var sliding = false
-#var crouching = false
-#var wall_running = false
 var camera_fov_extents = [75.0, 85.0] #index 0 is normal, index 1 is sprinting
 var base_player_y_scale = 1.0
 var crouch_player_y_scale = 0.25
@@ -59,6 +57,7 @@ var jump_count = 0
 	"leftray": $Head/SideRays/Left,
 	"rightray": $Head/SideRays/Right,
 	"timer": $Timer,
+	"cam_anim": $Head/Camera3D/AnimationPlayer
 }
 #@onready var world = get_parent()
 @onready var timer = $Timer
@@ -90,10 +89,9 @@ func can_climb():
 			return false
 	else:
 		return false
-	
-	
-func climb():
-	var cv = direction
+
+func climb_anim():
+	#var cv = direction
 	# Movement Restrictions
 	#velocity = Vector3.ZERO
 	
@@ -101,27 +99,41 @@ func climb():
 	var h_move_time := 0.2
 	if state != State.SLIDING || state != State.WALL_RUNNING:
 		# Vertical Transforms
-		var vertical_movement = global_transform.origin + Vector3(0,1.85,0)
-		var vm_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		#var vertical_movement = global_transform.origin + Vector3(0,1.85,0)
+		#var vm_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 		var camera_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		
-		vm_tween.tween_property(self, "global_transform:origin", vertical_movement, v_move_time)
+		var body_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		#vm_tween.tween_property(self, "global_transform:origin", vertical_movement, v_move_time)
+		body_tween.tween_property(self, "scale", 0.5, v_move_time)
 		camera_tween.tween_property(parts.camera, "rotation_degrees:x", clamp(parts.camera.rotation_degrees.x - 10,-85,90), v_move_time)
 		camera_tween.tween_property(parts.camera, "rotation_degrees:z", -5.0*sign(randf_range(-10000,10000)), v_move_time)
 		
-		await vm_tween.finished
-		
-		# Horizontal Transforms
-		var forward_movement = global_transform.origin + (-parts.head.basis.z * 5.2)
-		var fm_tween = get_tree().create_tween().set_trans(Tween.TRANS_LINEAR)
-		var camera_reset = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		fm_tween.tween_property(self, "global_transform:origin", forward_movement, h_move_time)
-		camera_reset.tween_property(parts.camera, "rotation_degrees:x", 0.0, h_move_time)
-		camera_reset.tween_property(parts.camera, "rotation_degrees:z", 0.0, h_move_time)
-
+		await body_tween.finished
+		#
+		## Horizontal Transforms
+		#var forward_movement = global_transform.origin + (-parts.head.basis.z * 1.2)
+		#var fm_tween = get_tree().create_tween().set_trans(Tween.TRANS_LINEAR)
+		#var camera_reset = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		#fm_tween.tween_property(self, "global_transform:origin", forward_movement, h_move_time)
+		#camera_reset.tween_property(parts.camera, "rotation_degrees:x", 0.0, h_move_time)
+		#camera_reset.tween_property(parts.camera, "rotation_degrees:z", 0.0, h_move_time)
+		body_tween.tween_property(self, "scale", 1, v_move_time)
 	# Reset Restrictions
 	#velocity = Vector3(cv.x * 1.5, cv.y * 1.5, cv.z * 1.5)
-	velocity *= cv
+	#velocity *= cv
+
+func climb(delta):
+	parts.body.scale.y = lerp(parts.body.scale.y, crouch_player_y_scale, delta)
+	#climb_anim()
+	velocity.y = (jump_velocity)
+	var xsign = direction.x / direction.x
+	var zsign = direction.z / direction.z
+	velocity = Vector3(direction.x * 5 + (3 * xsign), velocity.y, direction.z * 5 + (3 * zsign))
+	#await get_tree().create_timer(0.125).timeout
+
+	#velocity += direction * Vector3(2 ,2, 2)
+	parts.body.scale.y = lerp(parts.body.scale.y, base_player_y_scale, delta)
+	
 
 func wall_run(delta):
 	if w_runnable and is_on_wall_only() and (parts.leftray.is_colliding() or parts.rightray.is_colliding()):
@@ -146,9 +158,9 @@ func wall_run(delta):
 		if not is_on_floor():
 			var to_rot
 			if parts.leftray.is_colliding():
-				to_rot = -wallrun_angle
+				to_rot = -wall_run_tilt_angle
 			elif parts.rightray.is_colliding():
-				to_rot = wallrun_angle
+				to_rot = wall_run_tilt_angle
 			else:
 				to_rot = 0.0
 
@@ -157,7 +169,6 @@ func wall_run(delta):
 
 func _reset_camera_rotation():
 	parts.camera.rotation_degrees.z = lerp(parts.camera.rotation_degrees.z, 0.0, 0.1)
-
 
 func _ready():
 	if not is_multiplayer_authority(): return
@@ -176,77 +187,92 @@ func escape():
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
-func _process(delta):
-	if not is_multiplayer_authority(): return
-	print(velocity)
-	#print(can_climb())
-	
-	if abs(velocity.x) >  14.0 or abs(velocity.z) > 14.0:
+func check_flow():
+	if abs(velocity.x) >  20.0 or abs(velocity.z) > 20.0:
 		enter_flow.emit()
+		print(velocity)
 	else:
 		exit_flow.emit()
 
-	escape()
-
-	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
+func slide(delta):
+	if not is_on_floor() and (state != State.WALL_RUNNING):
+		velocity = Vector3(direction.x * 15, velocity.y, direction.z * 15)
+		state = State.FALLING
+	else:
 		var slide_direction = Vector3()
 		if !slide_started and is_on_floor():
 			slide_direction = Vector3(direction.x, 0, direction.z).normalized()
 			slide_started = true
 
-		#sliding = true
-		state = State.SLIDING
 		speed = slide_speed
-
 		parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[1], 10*delta)
 		parts.body.scale.y = lerp(parts.body.scale.y, crouch_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
 		parts.collision.scale.y = lerp(parts.collision.scale.y, crouch_player_y_scale, 20*delta)
 		velocity.x += (slide_direction.x * slide_speed) / (10 * delta) 
 		velocity.z += (slide_direction.z * slide_speed) / (10 * delta) 
-		
-	else:
-		#sprinting = false
-		#crouching = false
-		#sliding = false
-		state = State.WALKING
-		speed = base_speed
-		sensitivity = 0.1
-		parts.body.scale.y = lerp(parts.body.scale.y, base_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
 
-
-		if slide_enabled:
-			parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[0], 10*delta)
-
-func slam():
-	if not is_multiplayer_authority(): return
-	if not is_on_floor() and (state == State.SLAMMING):
-		significant_action.emit()
-		velocity = Vector3(direction.x * 15, -0.5, direction.z * 15)
-		state = State.SLAMMING
+func walk(delta):
+	parts.cam_anim.play("Head_Bob")
+	speed = base_speed
+	sensitivity = 0.1
+	parts.body.scale.y = lerp(parts.body.scale.y, base_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
 
 func jump():
 	if not is_multiplayer_authority(): return
-	if (is_on_floor() or jump_count < 3 or is_on_wall()) and state == State.JUMPING:
-		velocity.y += jump_velocity
+	if (is_on_floor() or jump_count < 3 or is_on_wall()):
+		velocity.y = jump_velocity
 		jump_count += 1
-		#if jump_count == 3:
-			#velocity *= Vector3(1, 1, 1)
-		timer.start()
+
+func _process(delta):
+	if not is_multiplayer_authority(): return
+	#print(velocity)
+	#print(can_climb())
+	#print((parts.leftray.is_colliding() or parts.rightray.is_colliding()))
+	check_flow()
+	escape()
+
+	var input_dir = Input.get_vector("MOVE_LEFT", "MOVE_RIGHT", "MOVE_FORWARD", "MOVE_BACKWARD")
+	direction = input_dir.normalized().rotated(-parts.head.rotation.y)
+	direction = Vector3(direction.x, 0, direction.y)
+
+	if Input.is_action_just_pressed("MOVE_JUMP"):
+		if can_climb():
+			#climb(delta)
+			print("canclimb")
+		else:
+			state = State.JUMPING
+			await get_tree().create_timer(0.1).timeout
+	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
+		state = State.SLIDING
+	else:
+		if direction != Vector3.ZERO:
+			state = State.WALKING
+			if slide_enabled:
+				parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[0], 10*delta)
+		else: 
+			state = State.IDLE
 
 func _physics_process(delta):
 	if not is_multiplayer_authority(): return
-	wall_run(delta)
-	
-	#if abs(velocity.x) > 10 or abs(velocity.z) > 10:
-		#if $Head/ChestRays/RayCast3D.is_colliding():
-			#if  can_climb():
-				#climb()
 
-	if not is_on_floor():
+	wall_run(delta)
+	if state == State.WALKING:
+		walk(delta)
+	elif state == State.JUMPING:
+		jump()
+	elif state == State.CLIMBING:
+		climb(delta)
+	elif state == State.SLIDING:
+		slide(delta)
+	elif state == State.IDLE:
+		pass
+
+	if not (is_on_floor()):
 		velocity.y -= (gravity * 1.3) * delta
 		w_runnable = true
-		#velocity.x = lerp(velocity.x, direction.x * 2, accel * delta)
-		#velocity.z = lerp(velocity.z, direction.z * 2, accel * delta)
+		if not is_on_wall():
+			velocity.x += direction.x / 10
+			velocity.z += direction.z / 10
 		state = State.FALLING
 	else:
 		if not state == State.SLIDING:
@@ -259,33 +285,9 @@ func _physics_process(delta):
 	if not is_on_wall():
 		_reset_camera_rotation()
 
-	if Input.is_action_just_pressed("MOVE_SLIDE"):
-		if not is_on_floor() and not (state == State.WALL_RUNNING):
-			state = State.SLAMMING
-			slam()
-			  # Reset camera rotation when on floor
-
-	if Input.is_action_just_pressed("MOVE_JUMP"):
-		if can_climb():
-			climb()
-		else:
-			state = State.JUMPING
-			jump()
-
-	var input_dir = Input.get_vector("MOVE_LEFT", "MOVE_RIGHT", "MOVE_FORWARD", "MOVE_BACKWARD")
-	direction = input_dir.normalized().rotated(-parts.head.rotation.y)
-	direction = Vector3(direction.x, 0, direction.y)
-
 	if state == State.WALL_RUNNING:
 		velocity.x = lerp(velocity.x, direction.x * speed, accel * delta)
 		velocity.z = lerp(velocity.z, direction.z * speed, accel * delta)
-
-
-	# bob head
-	#if input_dir and is_on_floor() and not state == State.SLIDING:
-		#parts.camera_animation.play("head_bob", 0.5)
-	#else:
-		#parts.camera_animation.play("reset", 0.5)
 
 	move_and_slide()
 

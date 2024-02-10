@@ -1,0 +1,267 @@
+[gd_scene load_steps=20 format=3 uid="uid://cuawnyag0ueoe"]
+
+[ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://textures/dark.png" id="1_cypd8"]
+[ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://textures/green.png" id="2_5mawr"]
+[ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://textures/orange.png" id="3_pt8uq"]
+[ext_resource type="Texture2D" uid="uid://cl4kewig3pk7s" path="res://textures/purple.png" id="4_qpfyy"]
+[ext_resource type="Texture2D" uid="uid://bhr1wpkt2k856" path="res://textures/rustig_koppie_puresky_4k.exr" id="5_gkqsi"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_caja7"]
+size = Vector3(50, 0, 50)
+
+[sub_resource type="Shader" id="Shader_1itqp"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.2.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
+uniform float point_size : hint_range(0,128);
+uniform float roughness : hint_range(0,1);
+uniform sampler2D texture_metallic : hint_default_white,filter_linear_mipmap,repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r,filter_linear_mipmap,repeat_enable;
+uniform float specular;
+uniform float metallic;
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+
+void vertex() {
+	UV=UV*uv1_scale.xy+uv1_offset.xy;
+}
+
+
+
+
+
+
+void fragment() {
+	vec2 base_uv = UV;
+	vec4 albedo_tex = texture(texture_albedo,base_uv);
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
+	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+	SPECULAR = specular;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qv7ph"]
+render_priority = 0
+shader = SubResource("Shader_1itqp")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(100, 100, 100)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(100, 100, 100)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = ExtResource("1_cypd8")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_6b5j0"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tphqv"]
+albedo_texture = ExtResource("2_5mawr")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k2so5"]
+albedo_texture = ExtResource("3_pt8uq")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gak8a"]
+albedo_texture = ExtResource("2_5mawr")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jrl3v"]
+albedo_texture = ExtResource("3_pt8uq")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eik52"]
+albedo_texture = ExtResource("4_qpfyy")
+
+[sub_resource type="Gradient" id="Gradient_ml3ci"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.275568, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.144838, 0.144838, 0.144838, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hh7h8"]
+gradient = SubResource("Gradient_ml3ci")
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_smt2o"]
+panorama = ExtResource("5_gkqsi")
+
+[sub_resource type="Sky" id="Sky_q8t4b"]
+sky_material = SubResource("PanoramaSkyMaterial_smt2o")
+
+[sub_resource type="Environment" id="Environment_jdjqb"]
+background_mode = 2
+sky = SubResource("Sky_q8t4b")
+ambient_light_source = 3
+ambient_light_color = Color(0.423529, 0.423529, 0.423529, 1)
+ambient_light_sky_contribution = 0.61
+ambient_light_energy = 3.0
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_white = 14.88
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 0.25
+glow_strength = 1.21
+glow_bloom = 0.25
+fog_enabled = true
+fog_sky_affect = 0.0
+volumetric_fog_density = 0.01
+volumetric_fog_emission = Color(0.407843, 0.462745, 0.639216, 1)
+volumetric_fog_length = 214.59
+volumetric_fog_detail_spread = 5.4075
+volumetric_fog_sky_affect = 0.1
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture2D_hh7h8")
+
+[node name="main" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+
+[node name="Collider" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_caja7")
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0145743, 0.0133858, 0.0692341)
+material_override = SubResource("ShaderMaterial_qv7ph")
+custom_aabb = AABB(0.5, 0, 0, 0.5, 0.5, 0.5)
+mesh = SubResource("PlaneMesh_6b5j0")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 2.5, -20)
+material_override = SubResource("StandardMaterial3D_tphqv")
+use_collision = true
+size = Vector3(20, 5, 1)
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="."]
+transform = Transform3D(1.75577e-08, 2.20978, 1.50996e-07, 0.401673, -9.65925e-08, -4.23516e-22, 2.65114e-15, 3.33667e-07, -1, 23.1191, 4.18791, -17.2405)
+material_override = SubResource("StandardMaterial3D_k2so5")
+use_collision = true
+size = Vector3(20, 9.84863, 1)
+
+[node name="CSGBox3D19" type="CSGBox3D" parent="."]
+transform = Transform3D(-1.75577e-08, -2.20978, 0, 0.401673, -9.65925e-08, 0, 0, 0, 1, 24.421, 4.05113, 12.6281)
+material_override = SubResource("StandardMaterial3D_k2so5")
+use_collision = true
+size = Vector3(20, 9.84863, 1)
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="."]
+transform = Transform3D(1.121, 3.1798e-08, -1.50996e-07, -3.94745e-08, 0.903, 3.23394e-07, 1.69266e-07, -2.92025e-07, 1, 23.5992, 4.63432, -13.7864)
+material_override = SubResource("StandardMaterial3D_k2so5")
+use_collision = true
+size = Vector3(20, 9.84863, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 2.5, -15)
+material_override = SubResource("StandardMaterial3D_gak8a")
+use_collision = true
+size = Vector3(20, 5, 1)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.000244304, 0, -1, 0, 1, 0, 1, 0, -0.000244304, -15, 2.5, 0)
+material_override = SubResource("StandardMaterial3D_k2so5")
+use_collision = true
+size = Vector3(20, 5, 1)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.000244304, 0, -1, 0, 1, 0, 1, 0, -0.000244304, -20, 2.5, 0)
+material_override = SubResource("StandardMaterial3D_jrl3v")
+use_collision = true
+size = Vector3(20, 5, 1)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.000507351, 0.000156913, -1, -0.000167367, 1, 0.000156997, 1, 0.000167445, -0.000507325, 0, 2.5, 20)
+use_collision = true
+size = Vector3(10, 5, 1)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.000244304, 0, -1, 0, 1, 0, 1, 0, -0.000244304, 10, 2.5, 20)
+use_collision = true
+size = Vector3(10, 5, 1)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="."]
+transform = Transform3D(7.07107, -7.07107, 0, 7.07107, 7.07107, 0, 0, 0, 10, 20, 0, 0)
+material_override = SubResource("StandardMaterial3D_eik52")
+use_collision = true
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -30)
+use_collision = true
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 4, -30)
+use_collision = true
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3, -30)
+use_collision = true
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, -30)
+use_collision = true
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.07904, 2.5, 25)
+use_collision = true
+size = Vector3(10.75, 5, 1)
+
+[node name="CSGBox3D16" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 4.49921, 11.8547, 0.631023, -9.05262)
+use_collision = true
+
+[node name="CSGBox3D21" type="CSGBox3D" parent="."]
+transform = Transform3D(7.65203, 0, 0, 0, 0.517922, 0, 0, 0, 4.49921, 36.2674, 1.32029, -9.14903)
+use_collision = true
+size = Vector3(0.813049, 1.37463, 1)
+
+[node name="CSGBox3D22" type="CSGBox3D" parent="."]
+transform = Transform3D(7.65203, 0, 0, 0, 0.517922, 0, 0, 0, 4.49921, 60.3442, 3.70762, -9.14903)
+use_collision = true
+size = Vector3(0.301544, 13.4956, 1)
+
+[node name="CSGBox3D17" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 4.49921, 17.8763, 0.631023, -9.08229)
+use_collision = true
+
+[node name="CSGBox3D18" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 4.49921, 22.9241, 0.631023, -9.13053)
+use_collision = true
+
+[node name="CSGBox3D20" type="CSGBox3D" parent="."]
+transform = Transform3D(1.02879, 0, 0, 0, 8.83495, 0, 0, 0, 4.62876, 33.6053, 3.95782, 10.1106)
+use_collision = true
+size = Vector3(1, 0.922729, 1)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.5783, 1.12536, -29.1016)
+use_collision = true
+size = Vector3(5, 2.5, 5)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_jdjqb")
+
+[node name="Sun" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(-0.695394, -0.31479, -0.646014, 0.133821, -0.939954, 0.313971, -0.706059, 0.131883, 0.695764, -5.7519, 12.3159, -4.4998)
+light_energy = 2.0
+light_indirect_energy = 3.166
+shadow_enabled = true
+shadow_normal_bias = 0.729
+shadow_opacity = 0.85
+shadow_blur = 0.98
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 10, 0, 0, 0, 1, 4, 0.754, -48.5618)
+use_collision = true
+inner_radius = 15.125
+outer_radius = 16.055
+sides = 64
