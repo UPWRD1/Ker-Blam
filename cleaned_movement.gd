@@ -191,21 +191,17 @@ func check_flow():
 		exit_flow.emit()
 
 func slide(delta):
-	if not is_on_floor() and (state != State.WALL_RUNNING):
-		velocity = Vector3(direction.x * 15, velocity.y, direction.z * 15)
-		state = State.FALLING
-	else:
-		var slide_direction = Vector3()
-		if !slide_started and is_on_floor():
-			slide_direction = Vector3(direction.x, 0, direction.z).normalized()
-			slide_started = true
+	var slide_direction = Vector3()
+	if !slide_started and is_on_floor():
+		slide_direction = Vector3(direction.x, 0, direction.z).normalized()
+		slide_started = true
 
-		speed = slide_speed
-		parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[1], 10*delta)
-		parts.body.scale.y = lerp(parts.body.scale.y, crouch_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
-		parts.collision.scale.y = lerp(parts.collision.scale.y, crouch_player_y_scale, 20*delta)
-		velocity.x += (slide_direction.x * slide_speed) / (10 * delta) 
-		velocity.z += (slide_direction.z * slide_speed) / (10 * delta) 
+	speed = slide_speed
+	parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[1], 10*delta)
+	parts.body.scale.y = lerp(parts.body.scale.y, crouch_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
+	parts.collision.scale.y = lerp(parts.collision.scale.y, crouch_player_y_scale, 20*delta)
+	velocity.x += (slide_direction.x * slide_speed) / (10 * delta) 
+	velocity.z += (slide_direction.z * slide_speed) / (10 * delta) 
 
 func walk(delta):
 	parts.cam_anim.play("Head_Bob")
@@ -237,6 +233,10 @@ func _process(delta):
 	if Input.is_action_just_pressed("MOVE_JUMP"):
 		state = State.JUMPING
 		await get_tree().create_timer(0.1).timeout
+	if Input.is_action_just_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
+		if not is_on_floor():
+			velocity = Vector3(direction.x * 15, velocity.y, direction.z * 15)
+			state = State.FALLING
 	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
 		state = State.SLIDING
 	else:
