@@ -147,6 +147,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_lnrgx")
 
+[node name="Head" type="RayCast3D" parent="Head"]
+target_position = Vector3(0, 2, 0)
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_li7ud")
 disabled = true

@@ -57,7 +57,8 @@ var jump_count = 0
 	"leftray": $Head/SideRays/Left,
 	"rightray": $Head/SideRays/Right,
 	"timer": $Timer,
-	"cam_anim": $Head/Camera3D/AnimationPlayer
+	"cam_anim": $Head/Camera3D/AnimationPlayer,
+	"head_ray": $Head/Head,
 }
 #@onready var world = get_parent()
 @onready var timer = $Timer
@@ -90,50 +91,45 @@ func can_climb():
 	else:
 		return false
 
-func climb_anim():
-	#var cv = direction
+
+func climb():
 	# Movement Restrictions
-	#velocity = Vector3.ZERO
+	velocity = Vector3.ZERO
 	
-	var v_move_time := 0.2
-	var h_move_time := 0.2
-	if state != State.SLIDING || state != State.WALL_RUNNING:
+	var v_move_time := 0.1
+	var h_move_time := 0.1
+	if state != State.SLIDING:
 		# Vertical Transforms
-		#var vertical_movement = global_transform.origin + Vector3(0,1.85,0)
-		#var vm_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		var vertical_movement = global_transform.origin + Vector3(0,1.85,0)
+		var vm_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 		var camera_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		var body_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		#vm_tween.tween_property(self, "global_transform:origin", vertical_movement, v_move_time)
-		body_tween.tween_property(self, "scale", 0.5, v_move_time)
+		
+		vm_tween.tween_property(self, "global_transform:origin", vertical_movement, v_move_time)
 		camera_tween.tween_property(parts.camera, "rotation_degrees:x", clamp(parts.camera.rotation_degrees.x - 10,-85,90), v_move_time)
 		camera_tween.tween_property(parts.camera, "rotation_degrees:z", -5.0*sign(randf_range(-10000,10000)), v_move_time)
 		
-		await body_tween.finished
-		#
-		## Horizontal Transforms
-		#var forward_movement = global_transform.origin + (-parts.head.basis.z * 1.2)
-		#var fm_tween = get_tree().create_tween().set_trans(Tween.TRANS_LINEAR)
-		#var camera_reset = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		#fm_tween.tween_property(self, "global_transform:origin", forward_movement, h_move_time)
-		#camera_reset.tween_property(parts.camera, "rotation_degrees:x", 0.0, h_move_time)
-		#camera_reset.tween_property(parts.camera, "rotation_degrees:z", 0.0, h_move_time)
-		body_tween.tween_property(self, "scale", 1, v_move_time)
-	# Reset Restrictions
-	#velocity = Vector3(cv.x * 1.5, cv.y * 1.5, cv.z * 1.5)
-	#velocity *= cv
+		await vm_tween.finished
+		
+		# Horizontal Transforms
+		var forward_movement = global_transform.origin + (-parts.head.basis.z * 1.2)
+		var fm_tween = get_tree().create_tween().set_trans(Tween.TRANS_LINEAR)
+		var camera_reset = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		fm_tween.tween_property(self, "global_transform:origin", forward_movement, h_move_time)
+		camera_reset.tween_property(parts.camera, "rotation_degrees:x", 0.0, h_move_time)
+		camera_reset.tween_property(parts.camera, "rotation_degrees:z", 0.0, h_move_time)
+	else:
+		var vertical_movement = global_transform.origin + Vector3(0,1.05,0)
+		# Vertical Transform
+		var vm_tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		vm_tween.tween_property(self,"global_transform:origin",vertical_movement,v_move_time)
+		
+		await vm_tween.finished
+		
+		# Horizontal Transform
+		var forward_movement = global_transform.origin + (-global_transform.basis.z * 1.2)
+		var fm_tween = get_tree().create_tween().set_trans(Tween.TRANS_LINEAR)
+		fm_tween.tween_property(self,"global_transform:origin",forward_movement,h_move_time)
 
-func climb(delta):
-	parts.body.scale.y = lerp(parts.body.scale.y, crouch_player_y_scale, delta)
-	#climb_anim()
-	velocity.y = (jump_velocity)
-	var xsign = direction.x / direction.x
-	var zsign = direction.z / direction.z
-	velocity = Vector3(direction.x * 5 + (3 * xsign), velocity.y, direction.z * 5 + (3 * zsign))
-	#await get_tree().create_timer(0.125).timeout
-
-	#velocity += direction * Vector3(2 ,2, 2)
-	parts.body.scale.y = lerp(parts.body.scale.y, base_player_y_scale, delta)
-	
 
 func wall_run(delta):
 	if w_runnable and is_on_wall_only() and (parts.leftray.is_colliding() or parts.rightray.is_colliding()):
@@ -195,21 +191,17 @@ func check_flow():
 		exit_flow.emit()
 
 func slide(delta):
-	if not is_on_floor() and (state != State.WALL_RUNNING):
-		velocity = Vector3(direction.x * 15, velocity.y, direction.z * 15)
-		state = State.FALLING
-	else:
-		var slide_direction = Vector3()
-		if !slide_started and is_on_floor():
-			slide_direction = Vector3(direction.x, 0, direction.z).normalized()
-			slide_started = true
+	var slide_direction = Vector3()
+	if !slide_started and is_on_floor():
+		slide_direction = Vector3(direction.x, 0, direction.z).normalized()
+		slide_started = true
 
-		speed = slide_speed
-		parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[1], 10*delta)
-		parts.body.scale.y = lerp(parts.body.scale.y, crouch_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
-		parts.collision.scale.y = lerp(parts.collision.scale.y, crouch_player_y_scale, 20*delta)
-		velocity.x += (slide_direction.x * slide_speed) / (10 * delta) 
-		velocity.z += (slide_direction.z * slide_speed) / (10 * delta) 
+	speed = slide_speed
+	parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[1], 10*delta)
+	parts.body.scale.y = lerp(parts.body.scale.y, crouch_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
+	parts.collision.scale.y = lerp(parts.collision.scale.y, crouch_player_y_scale, 20*delta)
+	velocity.x += (slide_direction.x * slide_speed) / (10 * delta) 
+	velocity.z += (slide_direction.z * slide_speed) / (10 * delta) 
 
 func walk(delta):
 	parts.cam_anim.play("Head_Bob")
@@ -234,21 +226,27 @@ func _process(delta):
 	var input_dir = Input.get_vector("MOVE_LEFT", "MOVE_RIGHT", "MOVE_FORWARD", "MOVE_BACKWARD")
 	direction = input_dir.normalized().rotated(-parts.head.rotation.y)
 	direction = Vector3(direction.x, 0, direction.y)
-
-	if Input.is_action_just_pressed("MOVE_JUMP"):
+	if Input.is_action_pressed("ACTION_CLIMB"):
 		if can_climb():
-			#climb(delta)
+			climb()
 			print("canclimb")
-		else:
-			state = State.JUMPING
-			await get_tree().create_timer(0.1).timeout
+	if Input.is_action_just_pressed("MOVE_JUMP"):
+		state = State.JUMPING
+		await get_tree().create_timer(0.1).timeout
+	if Input.is_action_just_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
+		if not is_on_floor():
+			velocity = Vector3(direction.x * 15, velocity.y, direction.z * 15)
+			state = State.FALLING
 	if Input.is_action_pressed("MOVE_SLIDE") and not (state == State.WALL_RUNNING):
 		state = State.SLIDING
 	else:
 		if direction != Vector3.ZERO:
-			state = State.WALKING
-			if slide_enabled:
-				parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[0], 10*delta)
+			if parts.head_ray.is_colliding():
+				state = State.SLIDING
+			else:
+				state = State.WALKING
+				if slide_enabled:
+					parts.camera.fov = lerp(parts.camera.fov, camera_fov_extents[0], 10*delta)
 		else: 
 			state = State.IDLE
 
@@ -261,7 +259,7 @@ func _physics_process(delta):
 	elif state == State.JUMPING:
 		jump()
 	elif state == State.CLIMBING:
-		climb(delta)
+		climb()
 	elif state == State.SLIDING:
 		slide(delta)
 	elif state == State.IDLE:
@@ -290,7 +288,6 @@ func _physics_process(delta):
 		velocity.z = lerp(velocity.z, direction.z * speed, accel * delta)
 
 	move_and_slide()
-
 
 func _input(event):
 	if not is_multiplayer_authority(): return
