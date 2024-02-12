@@ -1,22 +1,21 @@
-[gd_scene load_steps=13 format=3 uid="uid://dgww5i06smk8l"]
+[gd_scene load_steps=12 format=3 uid="uid://byx541ohexkbw"]
 
-[ext_resource type="Script" path="res://scripts/menu.gd" id="1_d5m2f"]
-[ext_resource type="PackedScene" uid="uid://vupfism0y8ub" path="res://scenes/main.tscn" id="1_u6hpc"]
-[ext_resource type="Theme" uid="uid://htljjiwxx5yv" path="res://assets/themes/menu_primary_theme.tres" id="2_144my"]
-[ext_resource type="Theme" uid="uid://8f0qdw2s2k52" path="res://assets/themes/menu_secondary_theme.tres" id="3_dsos3"]
-[ext_resource type="Shader" path="res://assets/shaders/particles.gdshader" id="3_kt46j"]
-[ext_resource type="Texture2D" uid="uid://b3ng7slf71a04" path="res://assets/textures/Frame 1 (13).png" id="4_gpjoo"]
-[ext_resource type="Theme" uid="uid://bxpsvu4i3j1dv" path="res://assets/themes/menu_text_entry_theme.tres" id="4_ikv7p"]
-[ext_resource type="Shader" path="res://assets/shaders/transition_1.gdshader" id="5_bayir"]
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_h5a1y"]
+[ext_resource type="Shader" path="res://assets/shaders/transition_1.gdshader" id="2_at4qq"]
+[ext_resource type="Shader" path="res://assets/shaders/particles.gdshader" id="3_l6mdh"]
+[ext_resource type="Texture2D" uid="uid://b3ng7slf71a04" path="res://assets/textures/Frame 1 (13).png" id="4_wxyio"]
+[ext_resource type="Theme" uid="uid://htljjiwxx5yv" path="res://assets/themes/menu_primary_theme.tres" id="5_3pitt"]
+[ext_resource type="Theme" uid="uid://8f0qdw2s2k52" path="res://assets/themes/menu_secondary_theme.tres" id="6_vruqt"]
+[ext_resource type="Theme" uid="uid://bxpsvu4i3j1dv" path="res://assets/themes/menu_text_entry_theme.tres" id="7_4jk8u"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1aieo"]
 resource_local_to_scene = true
-shader = ExtResource("5_bayir")
+shader = ExtResource("2_at4qq")
 shader_parameter/progress = 0.0
 shader_parameter/diamondPixelSize = 20.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_45ajv"]
-shader = ExtResource("3_kt46j")
+shader = ExtResource("3_l6mdh")
 shader_parameter/dimensions = Vector2(1152, 648)
 shader_parameter/rows = 20.0
 shader_parameter/columns = 5.0
@@ -30,7 +29,7 @@ shader_parameter/wave_speed = 0.1
 shader_parameter/wave_rotation = 1.0
 shader_parameter/far_color = Color(0.117647, 0.117647, 0.117647, 1)
 shader_parameter/near_color = Color(1, 1, 1, 1)
-shader_parameter/particle_texture = ExtResource("4_gpjoo")
+shader_parameter/particle_texture = ExtResource("4_wxyio")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lpumu"]
 bg_color = Color(1, 1, 1, 0)
@@ -38,7 +37,7 @@ bg_color = Color(1, 1, 1, 0)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsm67"]
 
 [node name="Menu" type="Node"]
-script = ExtResource("1_d5m2f")
+script = ExtResource("1_h5a1y")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -95,26 +94,26 @@ alignment = 1
 
 [node name="PlayButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("2_144my")
+theme = ExtResource("5_3pitt")
 text = " PLAY"
 alignment = 0
 
 [node name="LoadoutButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dsos3")
+theme = ExtResource("6_vruqt")
 theme_override_constants/outline_size = 0
 text = "  LOADOUT"
 alignment = 0
 
 [node name="OptionsButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dsos3")
+theme = ExtResource("6_vruqt")
 text = "  OPTIONS"
 alignment = 0
 
 [node name="QuitButton" type="Button" parent="CanvasLayer/Menu1/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dsos3")
+theme = ExtResource("6_vruqt")
 theme_override_constants/outline_size = 0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_wsm67")
 text = "  QUIT"
@@ -164,31 +163,29 @@ alignment = 1
 
 [node name="FindMatchButton" type="Button" parent="CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("2_144my")
+theme = ExtResource("5_3pitt")
 text = " FIND MATCH"
 alignment = 0
 
 [node name="HostButton" type="Button" parent="CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dsos3")
+theme = ExtResource("6_vruqt")
 theme_override_constants/outline_size = 0
 text = "  HOST"
 alignment = 0
 
 [node name="JoinButton" type="Button" parent="CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dsos3")
+theme = ExtResource("6_vruqt")
 text = "  JOIN"
 alignment = 0
 
 [node name="AddressEntry" type="LineEdit" parent="CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("4_ikv7p")
+theme = ExtResource("7_4jk8u")
 placeholder_text = " Enter address port"
 
 [node name="Node" type="Node" parent="CanvasLayer/Menu2"]
-
-[node name="main" parent="." instance=ExtResource("1_u6hpc")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://Player.tscn")

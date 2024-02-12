@@ -100,7 +100,7 @@ func transition_out():
 
 func _on_find_match_button_pressed():
 	transition_in()
-	await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.05).timeout
 	everything.hide()
 	Server.join_server()
 	 # Replace with function body.

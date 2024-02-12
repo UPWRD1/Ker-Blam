@@ -1,7 +1,7 @@
 extends Node
 
-const Player = preload("res://Player.tscn")
-const OtherPlayer = preload("res://OtherPlayers.tscn")
+@onready var Player = preload("res://Player.tscn")
+@onready var OtherPlayer = preload("res://OtherPlayers.tscn")
 
 @onready var map = preload("res://scenes/main.tscn")
 
@@ -44,8 +44,14 @@ func connected_to_server():
 	#player.name = str(peer_id)
 	#add_child(player)
 
-@rpc 
+func add_player(peer_id):
+	var player = Player.instantiate()
+	player.name = str(peer_id)
+	add_child(player)
+
+@rpc("any_peer")
 func instance_player(id, location):
+	print("Instancing player ", id, " at ", location)
 	var p = Player if get_tree().get_multiplayer().get_unique_id() == id else OtherPlayer
 	var player_instance = Global.instance_node(p, Nodes, location)
 	player_instance.name = str(id)
