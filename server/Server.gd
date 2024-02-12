@@ -39,12 +39,17 @@ func add_player(peer_id):
 	print("Player: ", peer_id, " connected!")
 	randomize()
 	print("Attempting to instance player ", peer_id, " at ", location)
-	await get_tree().create_timer(0.1).timeout
+	#await get_tree().create_timer(0.1).timeout
 	rpc("instance_player", peer_id, location)
 	#var player = Player.instantiate()
 	#player.name = str(peer_id)
 	#add_child(player)
 
+@rpc("any_peer")
+func update_transform(position, rotation, velocity):
+	print("updating transform")
+	var player_id = multiplayer.get_remote_sender_id()
+	rpc("update_player_transform", player_id, position)
 
 @rpc("any_peer")
 func instance_player(id, location):

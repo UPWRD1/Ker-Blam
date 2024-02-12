@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-var ptween = get_tree().create_tween()
+var ptween = create_tween()
 var base_speed = 15
 var puppet_pos = Vector3()
 var puppet_rot = Vector3()

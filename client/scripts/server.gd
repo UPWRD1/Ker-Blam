@@ -55,11 +55,17 @@ func instance_player(id, location):
 	var p = Player if get_tree().get_multiplayer().get_unique_id() == id else OtherPlayer
 	var player_instance = Global.instance_node(p, Nodes, location)
 	player_instance.name = str(id)
-	add_child(player_instance)
+	add_child(player_instance.instantiate())
 	if get_tree().get_multiplayer().get_unique_id() == id:
 		for i in get_tree().get_multiplayer().get_peers():
 			if i != 1:
 				instance_player(i, location)
-	
+
+@rpc("any_peer", "unreliable")
+func update_player_transform(id, position, rotation, velocity):
+	if get_tree().get_network_unique_id() != id:
+		Nodes.get_node(str(id)).force_update_transform(position, rotation, velocity)
+
+
 func _process(delta):
 	client.poll()
