@@ -1,7 +1,7 @@
 extends Node
 
 @onready var transition = $CanvasLayer/Transition
-
+@onready var everything = $CanvasLayer
 @onready var home_menu = $CanvasLayer/Menu1
 @onready var lan_menu = $CanvasLayer/Menu2
 @onready var address_entry = $CanvasLayer/Menu2/ColorRect/MainMenu/MarginContainer/VBoxContainer/AddressEntry 
@@ -51,7 +51,6 @@ func _on_join_button_pressed():
 	
 	multiplayer.peer_connected.connect(add_player)
 
-
 func add_player(peer_id):
 	var player = Player.instantiate()
 	player.name = str(peer_id)
@@ -61,7 +60,6 @@ func remove_player(peer_id):
 	var player = get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
-
 
 func upnp_setup():
 	var upnp = UPNP.new()
@@ -78,7 +76,6 @@ func upnp_setup():
 		"UPNP Port Mapping Failed! Error %s" % map_result)
 	
 	print("Success! Join Address: %s" % upnp.query_external_address())
-
 
 func _on_play_button_pressed():
 	transition_in()
@@ -101,6 +98,11 @@ func transition_out():
 		transition.material.set("shader_parameter/progress", amt)
 		await get_tree().create_timer(0.01).timeout
 
-
 func _on_find_match_button_pressed():
-	Server.join_server() # Replace with function body.
+	transition_in()
+	await get_tree().create_timer(0.1).timeout
+	everything.hide()
+	Server.join_server()
+	 # Replace with function body.
+	transition_out()
+
