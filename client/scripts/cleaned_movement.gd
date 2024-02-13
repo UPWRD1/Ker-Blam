@@ -72,13 +72,7 @@ var side = Vector3()
 
 var iscaptured: bool
 
-enum MpStatus {
-	HOSTING,
-	JOINING,
-	CLIENT,
-}
 
-var mpstat: MpStatus
 
 # Functions for movement
 func can_climb():
@@ -174,7 +168,8 @@ func _reset_camera_rotation():
 	parts.camera.rotation_degrees.z = lerp(parts.camera.rotation_degrees.z, 0.0, 0.1)
 
 func _ready():
-	#if not is_multiplayer_authority(): return
+	if PlayerStats.mpstat != PlayerStats.MpStatus.CLIENT:
+		if not is_multiplayer_authority(): return
 	parts.camera.current = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -217,13 +212,15 @@ func walk(delta):
 	parts.body.scale.y = lerp(parts.body.scale.y, base_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
 
 func jump():
-	#if not is_multiplayer_authority(): return
+	if PlayerStats.mpstat != PlayerStats.MpStatus.CLIENT:
+		if not is_multiplayer_authority(): return
 	if (is_on_floor() or jump_count < 3 or is_on_wall()):
 		velocity.y = jump_velocity
 		jump_count += 1
 
 func _process(delta):
-	#if not is_multiplayer_authority(): return
+	if PlayerStats.mpstat != PlayerStats.MpStatus.CLIENT:
+		if not is_multiplayer_authority(): return
 	#print(velocity)
 	#print(can_climb())
 	#print((parts.leftray.is_colliding() or parts.rightray.is_colliding()))
@@ -258,7 +255,8 @@ func _process(delta):
 			state = State.IDLE
 
 func _physics_process(delta):
-	#if not is_multiplayer_authority(): return
+	if PlayerStats.mpstat != PlayerStats.MpStatus.CLIENT:
+		if not is_multiplayer_authority(): return
 
 	wall_run(delta)
 	if state == State.WALKING:
@@ -297,8 +295,9 @@ func _physics_process(delta):
 	move_and_slide()
 
 func _input(event):
-	#if not is_multiplayer_authority(): return
-
+	if PlayerStats.mpstat != PlayerStats.MpStatus.CLIENT:
+		if not is_multiplayer_authority(): return
+	
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		parts.head.rotation_degrees.y -= event.relative.x * sensitivity
 		parts.head.rotation_degrees.x -= event.relative.y * sensitivity

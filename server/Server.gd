@@ -36,7 +36,7 @@ func with_websocket():
 
 
 func add_player(peer_id):
-	var location = Vector3(0,10,0)
+	var location = Vector3(0,2,0)
 	print("Player: ", peer_id, " connected!")
 	randomize()
 	print("Attempting to instance player ", peer_id, " at ", location)

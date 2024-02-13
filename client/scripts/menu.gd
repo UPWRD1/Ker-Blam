@@ -35,6 +35,7 @@ func _on_host_button_pressed():
 	bg.hide()
 	await get_tree().create_timer(0.1).timeout
 	add_player(multiplayer.get_unique_id())
+	PlayerStats.mpstat = PlayerStats.MpStatus.HOSTING
 	transition_out()
 	
 	#upnp_setup()
@@ -45,7 +46,7 @@ func _on_join_button_pressed():
 	bg.hide()
 	await get_tree().create_timer(0.1).timeout
 	transition_out()
-	
+	PlayerStats.mpstat = PlayerStats.MpStatus.JOINING
 	enet_peer.create_client("localhost", PORT)
 	multiplayer.multiplayer_peer = enet_peer
 	
@@ -105,4 +106,5 @@ func _on_find_match_button_pressed():
 	 # Replace with function body.
 	transition_out()
 	await get_tree().create_timer(0.05).timeout
+	PlayerStats.mpstat = PlayerStats.MpStatus.CLIENT
 	everything.hide()
