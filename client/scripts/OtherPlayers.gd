@@ -1,6 +1,5 @@
 extends CharacterBody3D
 
-var ptween = create_tween()
 var base_speed = 15
 var puppet_pos = Vector3()
 var puppet_rot = Vector3()
@@ -16,4 +15,4 @@ func update_transform(npuppet_pos, npuppet_rot, npuppet_vel):
 
 func new_puppet_pos(value):
 	puppet_pos = value
-	ptween.tween_property(self, "global_position", puppet_pos, 0.05)
+	global_position = lerp(global_position, puppet_pos, 1)

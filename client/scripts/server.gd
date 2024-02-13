@@ -35,9 +35,7 @@ func server_disconnected():
 	
 func connected_to_server():
 	print("Connected to server")
-	var nmap = map.instantiate()
-	nmap.name = "Map"
-	get_tree().root.add_child(nmap)
+	get_tree().root.add_child(map.instantiate())
 
 #func add_player(peer_id):
 	#var player = Player.instantiate()
@@ -50,22 +48,26 @@ func add_player(peer_id):
 	add_child(player)
 
 @rpc("any_peer")
+func update_transform(_position, _rotation, _velocity):
+	pass
+
+@rpc
 func instance_player(id, location):
 	print("Instancing player ", id, " at ", location)
 	var p = Player if get_tree().get_multiplayer().get_unique_id() == id else OtherPlayer
 	var player_instance = Global.instance_node(p, Nodes, location)
 	player_instance.name = str(id)
-	add_child(player_instance.instantiate())
 	if get_tree().get_multiplayer().get_unique_id() == id:
 		for i in get_tree().get_multiplayer().get_peers():
 			if i != 1:
 				instance_player(i, location)
 
-@rpc("any_peer", "unreliable")
-func update_player_transform(id, position, rotation, velocity):
-	if get_tree().get_network_unique_id() != id:
-		Nodes.get_node(str(id)).force_update_transform(position, rotation, velocity)
+@rpc("unreliable", "any_peer")
+func update_player_transform(id, nposition, nrotation, nvelocity):
+	if get_tree().get_multiplayer().get_unique_id() != id:
+		Nodes.get_node(str(id)).update_transform(nposition, nrotation, nvelocity)
 
 
-func _process(delta):
+
+func _process(_delta):
 	client.poll()

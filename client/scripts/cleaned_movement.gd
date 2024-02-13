@@ -72,6 +72,13 @@ var side = Vector3()
 
 var iscaptured: bool
 
+enum MpStatus {
+	HOSTING,
+	JOINING,
+	CLIENT,
+}
+
+var mpstat: MpStatus
 
 # Functions for movement
 func can_climb():
@@ -167,12 +174,12 @@ func _reset_camera_rotation():
 	parts.camera.rotation_degrees.z = lerp(parts.camera.rotation_degrees.z, 0.0, 0.1)
 
 func _ready():
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	parts.camera.current = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _enter_tree():
-	set_multiplayer_authority(str(name).to_int())
+	#set_multiplayer_authority(str(name).to_int())
 	await get_tree().create_timer(0.125).timeout
 	parts.collision.disabled = false
 
@@ -186,7 +193,7 @@ func escape():
 func check_flow():
 	if abs(velocity.x) >  20.0 or abs(velocity.z) > 20.0:
 		enter_flow.emit()
-		print(velocity)
+		#print(velocity)
 	else:
 		exit_flow.emit()
 
@@ -210,13 +217,13 @@ func walk(delta):
 	parts.body.scale.y = lerp(parts.body.scale.y, base_player_y_scale, 20*delta) #change this to starting a crouching animation or whatever
 
 func jump():
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	if (is_on_floor() or jump_count < 3 or is_on_wall()):
 		velocity.y = jump_velocity
 		jump_count += 1
 
 func _process(delta):
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	#print(velocity)
 	#print(can_climb())
 	#print((parts.leftray.is_colliding() or parts.rightray.is_colliding()))
@@ -229,7 +236,7 @@ func _process(delta):
 	if Input.is_action_pressed("ACTION_CLIMB"):
 		if can_climb():
 			climb()
-			print("canclimb")
+			#print("canclimb")
 	if Input.is_action_just_pressed("MOVE_JUMP"):
 		state = State.JUMPING
 		await get_tree().create_timer(0.1).timeout
@@ -251,7 +258,7 @@ func _process(delta):
 			state = State.IDLE
 
 func _physics_process(delta):
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 
 	wall_run(delta)
 	if state == State.WALKING:
@@ -290,9 +297,14 @@ func _physics_process(delta):
 	move_and_slide()
 
 func _input(event):
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		parts.head.rotation_degrees.y -= event.relative.x * sensitivity
 		parts.head.rotation_degrees.x -= event.relative.y * sensitivity
 		parts.head.rotation.x = clamp(parts.head.rotation.x, deg_to_rad(-90), deg_to_rad(90))	
+
+@rpc
+func _on_timer_2_timeout():
+	print("Updating transform with", position, ", ", rotation_degrees, ", ", velocity, " ",)
+	Server.rpc("update_transform", global_position, rotation_degrees, velocity) # Replace with function body.

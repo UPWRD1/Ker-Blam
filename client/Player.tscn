@@ -167,5 +167,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.68925)
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_25edy")
 
+[node name="Timer2" type="Timer" parent="."]
+wait_time = 0.05
+autostart = true
+
 [connection signal="enter_flow" from="." to="Head/0_7" method="_on_basic_fps_player_enter_flow"]
 [connection signal="exit_flow" from="." to="Head/0_7" method="_on_basic_fps_player_exit_flow"]
+[connection signal="timeout" from="Timer2" to="." method="_on_timer_2_timeout"]
