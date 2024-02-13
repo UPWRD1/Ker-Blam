@@ -2,18 +2,18 @@ extends CharacterBody3D
 
 
 #@export var crouch_enabled = true
-@export var slide_enabled = true
+@export var slide_enabled := true
 
-@export var base_speed = 15
-@export var sprint_speed = 20
-@export var wall_speed = 50
-@export var jump_velocity = 6
-@export var sensitivity = 0.1
-@export var accel = 10
-@export var crouch_speed = 3
-@export var slide_speed = 0
-@export var wall_run_tilt_angle : float = 15.0
-@export var dash_dist = 10
+@export var base_speed := 15
+@export var sprint_speed := 20
+@export var wall_speed := 50
+@export var jump_velocity := 6
+@export var sensitivity := 0.1
+@export var accel := 10
+@export var crouch_speed := 3
+@export var slide_speed := 0
+@export var wall_run_tilt_angle := 15.0
+@export var dash_dist := 10
 
 signal significant_action
 

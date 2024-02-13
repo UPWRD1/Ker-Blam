@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bkrj8rd5bxo1t"]
 
-[ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://assets/textures/dark.png" id="1_ww40f"]
+[ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://assets/textures/environment/dark.png" id="1_ww40f"]
 
 [sub_resource type="Shader" id="Shader_1itqp"]
 code = "// NOTE: Shader automatically converted from Godot Engine 4.2.stable's StandardMaterial3D.

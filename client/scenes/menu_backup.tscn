@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_h5a1y"]
 [ext_resource type="Shader" path="res://assets/shaders/transition_1.gdshader" id="2_at4qq"]
 [ext_resource type="Shader" path="res://assets/shaders/particles.gdshader" id="3_l6mdh"]
-[ext_resource type="Texture2D" uid="uid://b3ng7slf71a04" path="res://assets/textures/Frame 1 (13).png" id="4_wxyio"]
+[ext_resource type="Texture2D" uid="uid://b3ng7slf71a04" path="res://assets/textures/environment/Frame 1 (13).png" id="4_wxyio"]
 [ext_resource type="Theme" uid="uid://htljjiwxx5yv" path="res://assets/themes/menu_primary_theme.tres" id="5_3pitt"]
 [ext_resource type="Theme" uid="uid://8f0qdw2s2k52" path="res://assets/themes/menu_secondary_theme.tres" id="6_vruqt"]
 [ext_resource type="Theme" uid="uid://bxpsvu4i3j1dv" path="res://assets/themes/menu_text_entry_theme.tres" id="7_4jk8u"]

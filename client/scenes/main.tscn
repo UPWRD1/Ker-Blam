@@ -1,11 +1,11 @@
 [gd_scene load_steps=32 format=3 uid="uid://vupfism0y8ub"]
 
+[ext_resource type="Texture2D" uid="uid://bhr1wpkt2k856" path="res://assets/textures/environment/rustig_koppie_puresky_4k.exr" id="1_ckfie"]
 [ext_resource type="Material" uid="uid://bkrj8rd5bxo1t" path="res://assets/materials/floor.tres" id="2_p145e"]
-[ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://assets/textures/dark.png" id="4_6421s"]
-[ext_resource type="Texture2D" uid="uid://bhr1wpkt2k856" path="res://assets/textures/rustig_koppie_puresky_4k.exr" id="5_a53ph"]
-[ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://assets/textures/green.png" id="7_gw5sn"]
-[ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://assets/textures/orange.png" id="8_r2t6e"]
-[ext_resource type="Texture2D" uid="uid://cl4kewig3pk7s" path="res://assets/textures/purple.png" id="9_qusmc"]
+[ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://assets/textures/environment/orange.png" id="3_xlp5p"]
+[ext_resource type="Texture2D" uid="uid://cl4kewig3pk7s" path="res://assets/textures/environment/purple.png" id="4_0omgt"]
+[ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://assets/textures/environment/green.png" id="5_ggluo"]
+[ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://assets/textures/environment/dark.png" id="6_ddojm"]
 
 [sub_resource type="Gradient" id="Gradient_ml3ci"]
 interpolation_color_space = 2
@@ -16,7 +16,7 @@ colors = PackedColorArray(0, 0, 0, 1, 0.144838, 0.144838, 0.144838, 1, 1, 1, 1, 
 gradient = SubResource("Gradient_ml3ci")
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_smt2o"]
-panorama = ExtResource("5_a53ph")
+panorama = ExtResource("1_ckfie")
 
 [sub_resource type="Sky" id="Sky_q8t4b"]
 sky_material = SubResource("PanoramaSkyMaterial_smt2o")
@@ -53,58 +53,58 @@ size = Vector3(50, 0, 50)
 size = Vector2(50, 50)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k2so5"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_xlp5p")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5j2qn"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_xlp5p")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wwyaj"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_xlp5p")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rg5wn"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_xlp5p")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jrl3v"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_xlp5p")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ji88k"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_xlp5p")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t4t8h"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_xlp5p")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r72om"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_xlp5p")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eik52"]
-albedo_texture = ExtResource("9_qusmc")
+albedo_texture = ExtResource("4_0omgt")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v3csd"]
-albedo_texture = ExtResource("7_gw5sn")
+albedo_texture = ExtResource("5_ggluo")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5tb26"]
-albedo_texture = ExtResource("7_gw5sn")
+albedo_texture = ExtResource("5_ggluo")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cabe3"]
-albedo_texture = ExtResource("7_gw5sn")
+albedo_texture = ExtResource("5_ggluo")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yhbg4"]
-albedo_texture = ExtResource("7_gw5sn")
+albedo_texture = ExtResource("5_ggluo")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gvt2y"]
-albedo_texture = ExtResource("7_gw5sn")
+albedo_texture = ExtResource("5_ggluo")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x5e3x"]
-albedo_texture = ExtResource("7_gw5sn")
+albedo_texture = ExtResource("5_ggluo")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3k3i3"]
-albedo_texture = ExtResource("9_qusmc")
+albedo_texture = ExtResource("4_0omgt")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mlf04"]
-albedo_texture = ExtResource("4_6421s")
+albedo_texture = ExtResource("6_ddojm")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cpjk1"]
-albedo_texture = ExtResource("8_r2t6e")
+albedo_texture = ExtResource("3_xlp5p")
 
 [node name="main" type="Node3D"]
 

@@ -13,7 +13,11 @@ config_version=5
 config/name="ker blam"
 run/main_scene="res://scenes/menu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
+boot_splash/bg_color=Color(0.117647, 0.117647, 0.117647, 1)
+boot_splash/image="res://assets/textures/logos/dimensionlabs_logo_transparent_bg_wide.png"
+boot_splash/fullsize=false
 config/icon="res://icon.svg"
+boot_splash/minimum_display_time=5
 
 [autoload]
 
@@ -82,5 +86,9 @@ ACTION_CLIMB={
 
 [rendering]
 
+driver/threads/thread_model=2
+anti_aliasing/screen_space_roughness_limiter/enabled=false
+environment/glow/upscale_mode=0
 environment/defaults/default_clear_color=Color(1, 1, 1, 1)
 anti_aliasing/quality/screen_space_aa=1
+occlusion_culling/use_occlusion_culling=true

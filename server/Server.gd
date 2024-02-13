@@ -1,8 +1,23 @@
 extends Node
 
+var ip_adress :String
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if OS.has_feature("windows"):
+		if OS.has_environment("COMPUTERNAME"):
+			ip_adress =  IP.resolve_hostname(str(OS.get_environment("COMPUTERNAME")),1)
+	elif OS.has_feature("x11"):
+		if OS.has_environment("HOSTNAME"):
+			ip_adress =  IP.resolve_hostname(str(OS.get_environment("HOSTNAME")),1)
+	elif OS.has_feature("OSX"):
+		if OS.has_environment("HOSTNAME"):
+			ip_adress =  IP.resolve_hostname(str(OS.get_environment("HOSTNAME")),1)
+	else:
+		print("Could not find ip address!")
+		queue_free()
 	with_websocket() # Replace with function body.
 
 
