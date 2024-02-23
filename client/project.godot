@@ -86,7 +86,6 @@ ACTION_CLIMB={
 
 [rendering]
 
-driver/threads/thread_model=2
 anti_aliasing/screen_space_roughness_limiter/enabled=false
 environment/glow/upscale_mode=0
 environment/defaults/default_clear_color=Color(1, 1, 1, 1)

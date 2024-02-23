@@ -16,3 +16,6 @@ func update_transform(npuppet_pos, npuppet_rot, npuppet_vel):
 func new_puppet_pos(value):
 	puppet_pos = value
 	global_position = lerp(global_position, puppet_pos, 1)
+
+func remove_puppet():
+	queue_free()

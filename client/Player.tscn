@@ -98,11 +98,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.047)
 [node name="Camera3D" type="Camera3D" parent="Head"]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Head/Camera3D"]
-deterministic = true
 libraries = {
 "": SubResource("AnimationLibrary_hpuff")
 }
-speed_scale = 0.5
 
 [node name="ChestRays" type="Node3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0.047)

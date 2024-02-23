@@ -2,7 +2,8 @@ extends Node
 
 var ip_adress :String
 
-
+##################################################
+##                  MULTIPLAYER
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -73,9 +74,9 @@ func update_player_transform(id, position, rotation, velocity):
 
 func remove_player(peer_id):
 	print("Player: ", peer_id, " disconnected!")
-	#var player = get_node_or_null(str(peer_id))
-	#if player:
-		#player.queue_free()
+	var player = get_node_or_null(str(peer_id))
+	if player:
+		player.queue_free()
 
 func _exit_tree():
 	multiplayer.connection_failed.emit()

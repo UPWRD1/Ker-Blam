@@ -214,7 +214,7 @@ func walk(delta):
 func jump():
 	if PlayerStats.mpstat != PlayerStats.MpStatus.CLIENT:
 		if not is_multiplayer_authority(): return
-	if (is_on_floor() or jump_count < 3 or is_on_wall()):
+	if (is_on_floor() or jump_count < 3 or is_on_wall()) and not (state == State.SLAMMING):
 		velocity.y = jump_velocity
 		jump_count += 1
 
@@ -305,5 +305,6 @@ func _input(event):
 
 @rpc
 func _on_timer_2_timeout():
-	print("Updating transform with", position, ", ", rotation_degrees, ", ", velocity, " ",)
-	Server.rpc("update_transform", global_position, rotation_degrees, velocity) # Replace with function body.
+	if PlayerStats.mpstat == PlayerStats.MpStatus.CLIENT:
+		print("Updating transform with", position, ", ", rotation_degrees, ", ", velocity, " ",)
+		Server.rpc("update_transform", global_position, rotation_degrees, velocity) # Replace with function body.
