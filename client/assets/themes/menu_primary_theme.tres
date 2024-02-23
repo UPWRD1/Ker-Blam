@@ -1,0 +1,27 @@
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://htljjiwxx5yv"]
+
+[ext_resource type="FontFile" uid="uid://coj5aofxoaae8" path="res://assets/fonts/Mohave/static/Mohave-BoldItalic.ttf" id="1_ps1g2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p1r44"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1i0o3"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x8rqw"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m3vop"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjpvr"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[resource]
+default_font = ExtResource("1_ps1g2")
+default_font_size = 64
+Button/colors/font_color = Color(0.117647, 0.117647, 0.117647, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/styles/disabled = SubResource("StyleBoxEmpty_p1r44")
+Button/styles/focus = SubResource("StyleBoxFlat_1i0o3")
+Button/styles/hover = SubResource("StyleBoxFlat_x8rqw")
+Button/styles/normal = SubResource("StyleBoxEmpty_m3vop")
+Button/styles/pressed = SubResource("StyleBoxFlat_mjpvr")
